@@ -10,6 +10,12 @@
   }
 }
 
+img {
+  max-width: 100%;
+  height: auto; 
+  display: block;
+}
+
 // Add your fractal Sass files below!
 @import 'navbar/navbar';
 @import 'home/home';
