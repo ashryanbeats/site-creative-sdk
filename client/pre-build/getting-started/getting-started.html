@@ -24,39 +24,58 @@
 
       <li>
         <p class="li-header">Quick Start</p>
-        <p>After opening Android Studio, in the Quick Start list click "Start a new Android Studio project".</p>
+        <p>After opening Android Studio, in the Quick Start list click "Start a new Android Studio project".
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/1-welcome-screen.png">
+        </p>
       </li>
 
       <li>
         <p class="li-header">New Project</p>
-        <p>Enter the name of your new project. Here, we are using "My Photo App" as the name of our project. Leave the other settings as they are and click Next.</p>
+        <p>Enter the name of your new project. Here, we are using "My Photo App" as the name of our project. Leave the other settings as they are and click Next.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/2-new-project.png">
+
+        </p>
       </li>
 
       <li>
         <p class="li-header">Target Android Devices</p> 
-        <p>Check Phone and Tablet. As the Minimum SDK, select "API 15: Android 4.0.3 (IceCreamSandwich)" then click Next.</p>
+        <p>Check Phone and Tablet. As the Minimum SDK, select "API 15: Android 4.0.3 (IceCreamSandwich)" then click Next.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/3-target-devices.png">
+        </p>
       </li>
 
       <li>
         <p class="li-header">Add an activity to Mobile</p>
-        <p>Select Blank Activity and click Next.</p>
+        <p>Select Blank Activity and click Next.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/4-add-activity.png">
+        </p>
       </li>
 
       <li>
         <p class="li-header">Customize the Activity</p>
-        <p>Here we just need to change the title of the activity to something human-readable. In this case, we are calling it "My Photo App".</p>
+        <p>Here we just need to change the title of the activity to something human-readable. In this case, we are calling it "My Photo App".
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/5-customize-activity.png">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">The project opens in Android Studio</p>
+        <p>After following the steps above, we should have our default Android app ready to go:
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/6-default-android-app.png">
+        </p>
       </li>
 
     </ol>
 
-    After following the steps above, we should have our default Android app ready to go.
 
     <h2>Add Adobe Creative SDK to the app</h2>
     <ol>
 
       <li>
         <p class="li-header">Move the SDK repo into our app</p>
-        <p>In the <a href="#" ui-sref="intro">intro section</a> we downloaded the Adobe Creative SDK for Android to our local computer. After unzipping the file, we should now move the resulting <code>creativesdk-repo</code> directory into the <em>top level</em> of our Android app's file structure.</p>
+        <p>In the <a href="#" ui-sref="intro">intro section</a> we downloaded the Adobe Creative SDK for Android to our local computer. After unzipping the file, we should now move the resulting <code>creativesdk-repo</code> directory into the <em>top level</em> of our Android app's file structure.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/7-paste-sdk-into-project.png">
+        </p>
         <p class="bg-info bg-padding"><strong>Note:</strong> For current versions of Android Studio, you will need to use your computer's file browser (i.e., Mac Finder or Windows Explorer) to add the SDK. Dragging the SDK directly into Android Studio will do nothing in some versions.</p>
       </li>
 
@@ -258,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
         <p class="li-header">Launch your virtual device with AVD Manager</p>
         <p>In Android Studio, open AVD Manager from the menu:
           <blockquote>Tools > Android > AVD Manager</blockquote>
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/8-avd-manager.png">
         </p>
       </li>
 
@@ -267,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         <p>If you don't have a virtual device to select, you will need to create one. <a href="http://developer.android.com/tools/devices/managing-avds.html">See the Android Developer guide for more information on creating and managing virtual devices.</a></p>
         <p class="bg-info bg-padding">
           <strong>Note:</strong> Launching a virtual device can take time. Make sure the device launches and you see the emulator running on your computer before you move to the next step.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/9-virtual-device.png">
         </p>
       </li>
 
@@ -283,10 +303,13 @@ public class MainActivity extends AppCompatActivity {
           </ol>
         </p>
 
-        <p>If the Gradle build is successful, a Choose Device window will appear. Select the virtual device that we launched in the previous step and click OK.</p>
+        <p>If the Gradle build is successful, a Choose Device window will appear. Select the virtual device that we launched in the previous step and click OK.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/10-choose-device.png">
+
+        </p>
 
         <p>After the build and run process is complete (which can take some time), you should see our app running in the virtual device:
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/intro/11-running-app.png">
         </p>
 
       </li>

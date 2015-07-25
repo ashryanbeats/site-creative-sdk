@@ -1,0 +1,238 @@
+<section id="auth-client" class="row">
+  
+  <div class="col-sm-9" id="content">
+    <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+
+    <h1>Implementing Adobe Auth for client</h1>
+    <h2>What we will do</h2>
+    <p>In this section, we will make it possible for your app to communicate with Adobe Creative Cloud APIs.</p>
+
+    <p>
+      Specifically, we will:
+      <ol>
+        <li>Create a new java file that contains your Main Application</li>
+        <li>Use Creative SDK to pass your app's credentials to Adobe</li>
+      </ol>
+    </p>
+
+    <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already reviewed the <a href="#" ui-sref="intro">Intro section</a> and <a href="#" ui-sref="getting-started">Getting Started section</a>!</p>
+
+
+    <h2>Related documentation for Creative SDK classes</h2>
+    <p>In this section, we will use the following Creative SDK classes:</p>
+    <ul>
+      <li><code>IAdobeAuthClientCredentials</code> (<a href="">documentation</a>)</li>
+      <li><code>AdobeCSDKFoundation</code> (<a href="">documentation</a>)</li>
+    </ul>
+
+
+    <h2>Create the Main Application for client auth</h2>
+    <p>Now that we have our basic Android Studio project set up and ready to go, let's make the java class that will help authenticate our client.
+    <ol>
+
+      <li>
+        <p class="li-header">Create a new java class for the Main Application</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, open the <code>java</code> directory and click the <code>{username}.com.myphotoapp</code> directory to highlight it.
+          <img src="">
+        </p>
+
+        <p>
+          In Android Studio's menu bar, go to:
+          <blockquote>File > New > Java Class</blockquote>
+        </p>
+        
+        <p>
+          A Create New Class window will appear. Enter <code>MainApplication</code> as the name and click OK.
+          <img src="">
+        </p>
+
+      </li>
+
+      <li>
+        <p class="li-header">Basic setup for the Main Application</p>
+        <p>
+          In our new <code>MainApplication.java</code> file, let's tell the app what this class extends and indicate that it implements Adobe Auth which comes with Creative SDK.
+        </p>
+        <p>
+          Make sure the MainApplication class matches the code below:
+          <pre>
+            <code>
+public class MainApplication extends Application implements IAdobeAuthClientCredentials {
+}
+            </code>
+          </pre>
+        </p>
+        <div class="bg-info bg-padding">
+          <p><strong>Note:</strong> Android Studio will highlight in red any class that the current class doesn't have access to. In this case, the words <code>Application</code> and <code>IAdobeAuthClientCredentials</code> will likely be highlighted red in your code.
+          <img src="">
+          </p>
+
+          <p>If you hover over a red class name, Android Studio will try to help you import the appropriate class, as you can see in the screenshot above. Simply use the keyboard shortcut indicated in the popup (e.g., option + return on a Mac) and Android Studio will import the necessary class.</p>
+
+          <p>After import, your <code>MainApplication.java</code> file will look like this:
+            <pre>
+              <code>
+package {username}.com.myphotoapp;
+
+import android.app.Application;
+
+import com.adobe.creativesdk.foundation.auth.IAdobeAuthClientCredentials;
+
+public class MainApplication extends Application implements IAdobeAuthClientCredentials {
+}
+              </code>
+            </pre>
+          </p>
+        </div>
+        <div class="bg-warning bg-padding">
+          <p><strong>Warning:</strong> Going forward, it will be assumed that you are importing external classes in the manner indicated in the note above.</p>
+        </div>
+      </li>
+
+      <li>
+        <p class="li-header">Add your Client ID and Client Secret</p>
+        <p>
+          It was mentioned in the <a href="#" ui-sref="intro">Intro section</a> that you should register a new app with Adobe Creative SDK and obtain a Client ID and Client Secret. Now we will use them.</p> 
+        </p>
+        <p>
+          In your <code>MainApplication.java</code>, add the following two lines inside the body of the class:
+          <pre>
+            <code>
+private static final String CREATIVE_SDK_SAMPLE_CLIENT_ID = "";
+private static final String CREATIVE_SDK_SAMPLE_CLIENT_SECRET = "";
+            </code>
+          </pre>
+          Inside of the two strings above, add your Client ID and Client Secret, respectively.
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Add methods to your Main Application</p>
+        <p>
+          Add the following methods to your <code>MainApplication</code> class:
+          <pre>
+            <code>
+@Override
+public void onCreate() {
+    super.onCreate();
+    AdobeCSDKFoundation.initializeCSDKFoundation(getApplicationContext());
+}
+
+@Override
+public String getClientID() {
+    return CREATIVE_SDK_SAMPLE_CLIENT_ID;
+}
+
+@Override
+public String getClientSecret() {
+    return CREATIVE_SDK_SAMPLE_CLIENT_SECRET;
+}
+            </code>
+          </pre>
+        </p>
+        <p>
+          We call <code>AdobeCSDKFoundation.initializeCSDKFoundation()</code> in <code>onCreate()</code> so that our credentials are available every time the app starts.
+        </p>
+        <p>
+          <code>getClientId()</code> and <code>getClientSecret()</code> return our credentials. We won't need to call these methods ourselves, but they must be present in order for the SDK to get our credentials.
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Review your Main Application</p>
+        <p>
+          We're done dealing with the Main Application class directly.
+        </p>
+        <p>
+          At this point, your <code>MainApplication.java</code> file should look like this:
+          <pre>
+            <code>
+package {username}.com.myphotoapp;
+
+import android.app.Application;
+
+import com.adobe.creativesdk.foundation.AdobeCSDKFoundation;
+import com.adobe.creativesdk.foundation.auth.IAdobeAuthClientCredentials;
+
+public class MainApplication extends Application implements IAdobeAuthClientCredentials {
+    private static final String CREATIVE_SDK_SAMPLE_CLIENT_ID = "your_id_here";
+    private static final String CREATIVE_SDK_SAMPLE_CLIENT_SECRET = "your_secret_here";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        AdobeCSDKFoundation.initializeCSDKFoundation(getApplicationContext());
+    }
+
+    @Override
+    public String getClientID() {
+        return CREATIVE_SDK_SAMPLE_CLIENT_ID;
+    }
+
+    @Override
+    public String getClientSecret() {
+        return CREATIVE_SDK_SAMPLE_CLIENT_SECRET;
+    }
+}
+            </code>
+          </pre>
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Register your Main Application in the Manifest</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, open the <code>manifests</code> directory and double click the <code>AndroidManifest.xml</code> file to open it.
+          <img src="">
+        </p>
+        <p>
+          Inside of the top level <code>application</code> tag, we will a new attribute: <code>android:name=".MainApplication"</code>. Your Android Manifest will now look like this:
+          <pre>
+            <code>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;{username}.com.myphotoapp&quot; &gt;
+
+    &lt;application
+        android:allowBackup=&quot;true&quot;
+        android:icon=&quot;@mipmap/ic_launcher&quot;
+        android:label=&quot;@string/app_name&quot;
+        android:theme=&quot;@style/AppTheme&quot;
+        <strong>android:name=&quot;.MainApplication&quot;</strong> &gt;
+        &lt;activity
+            android:name=&quot;.MainActivity&quot;
+            android:label=&quot;@string/app_name&quot; &gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
+
+                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+    &lt;/application&gt;
+
+&lt;/manifest&gt;
+            </code>
+          </pre>
+        </p>
+      </li>
+
+    </ol>
+
+
+    <h2>Build and run the app</h2>
+    <p>
+      Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin:
+      <ol>
+        <li>Launch your virtual device</li>
+        <li>Build and run your app</li>
+        <li>Check for errors</li>
+      </ol>
+    </p>
+
+    <p>Visually, nothing should have changed in the app UI. We will start adding some user-facing features in the next step!</p>
+
+
+  </div>
+
+</section>
