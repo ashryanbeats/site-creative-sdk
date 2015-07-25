@@ -16,7 +16,16 @@ img {
   display: block;
 }
 
+.li-header {
+  font-style: italic;
+}
+
+.bg-padding {
+  padding: 15px;
+}
+
 // Add your fractal Sass files below!
 @import 'navbar/navbar';
 @import 'home/home';
 @import 'android/android';
+
