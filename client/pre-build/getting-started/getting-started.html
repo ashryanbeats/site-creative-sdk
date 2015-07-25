@@ -1,0 +1,313 @@
+<section id="getting-started" class="row">
+  
+  <div class="col-sm-9" id="content">
+    <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+
+    <h1>Getting started</h1>
+    <h2>What we will do</h2>
+    <p>In this section, we will get a basic Android app up and going that will provide the foundation for our Adobe Creative SDK app.</p>
+
+    <p>
+      Specifically, we will:
+      <ol>
+        <li>Create a new Android Studio project</li>
+        <li>Add Adobe Creative SDK to the project</li>
+        <li>Do some basic housecleaning</li>
+        <li>Lanch a virtual device then build and run our basic app</li>
+      </ol>
+    </p>
+
+    <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already gathered all the tools you'll need which are listed in the <a href="#" ui-sref="intro">Intro section!</a></p>
+
+    <h2>Start a new Android Studio project</h2>
+    <ol>
+
+      <li>
+        <p class="li-header">Quick Start</p>
+        <p>After opening Android Studio, in the Quick Start list click "Start a new Android Studio project".</p>
+      </li>
+
+      <li>
+        <p class="li-header">New Project</p>
+        <p>Enter the name of your new project. Here, we are using "My Photo App" as the name of our project. Leave the other settings as they are and click Next.</p>
+      </li>
+
+      <li>
+        <p class="li-header">Target Android Devices</p> 
+        <p>Check Phone and Tablet. As the Minimum SDK, select "API 15: Android 4.0.3 (IceCreamSandwich)" then click Next.</p>
+      </li>
+
+      <li>
+        <p class="li-header">Add an activity to Mobile</p>
+        <p>Select Blank Activity and click Next.</p>
+      </li>
+
+      <li>
+        <p class="li-header">Customize the Activity</p>
+        <p>Here we just need to change the title of the activity to something human-readable. In this case, we are calling it "My Photo App".</p>
+      </li>
+
+    </ol>
+
+    After following the steps above, we should have our default Android app ready to go.
+
+    <h2>Add Adobe Creative SDK to the app</h2>
+    <ol>
+
+      <li>
+        <p class="li-header">Move the SDK repo into our app</p>
+        <p>In the <a href="#" ui-sref="intro">intro section</a> we downloaded the Adobe Creative SDK for Android to our local computer. After unzipping the file, we should now move the resulting <code>creativesdk-repo</code> directory into the <em>top level</em> of our Android app's file structure.</p>
+        <p class="bg-info bg-padding"><strong>Note:</strong> For current versions of Android Studio, you will need to use your computer's file browser (i.e., Mac Finder or Windows Explorer) to add the SDK. Dragging the SDK directly into Android Studio will do nothing in some versions.</p>
+      </li>
+
+      <li>
+        <p class="li-header">Add the base location of Creative SDK to Maven</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, go to your <code>build.gradle (Module: app)</code> file:
+          <blockquote>
+            Gradle Scripts > build.gradle <strong>(Module: app)</strong>
+          </blockquote>
+        </p>
+        <p>
+          At the bottom of the <code>build.gradle (Module: app)</code> file, add the following code:
+          <pre>
+            <code class="prettyprint">
+allprojects {
+    apply plugin: 'maven'
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+
+        maven {
+            url "${project.rootDir}/creativesdk-repo/release"  // The base location of Creative SDK
+        }
+
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
+            </code>
+          </pre>
+        </p>
+        <p>Note in particular the following line:
+          <pre>
+            <code>
+url "${project.rootDir}/creativesdk-repo/release"
+            </code>
+          </pre>
+          This line indicates the base directory where Creative SDK exists in your app. The URL here should go up to, <em>but not include</em>, the <code>com</code> directory nested within the <code>creativesdk-repo</code> directory. By default, the location is as noted in the code above.
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Update your dependencies</p>
+        <p>To make sure that the relevant elements of Creative SDK are actually available to us in the app, we need to update our dependencies. In our <code>gradle.build (Module: app)</code> file, make sure the <code>dependencies</code> section matches the following code (or if there is no <code>dependencies</code> section, add the following code to the bottom of your file):
+          <pre>
+            <code>
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:multidex:1.0.0'
+
+    compile 'com.adobe.creativesdk.foundation:assets:0.4.264'
+    compile 'com.adobe.creativesdk:image:4.0.0'
+}
+            </code>
+          </pre>
+        </p>
+        <p>In our dependencies, we've added Creative SDK Foundation Assets and Image. We will be using these to build our app.</p>
+        <p>We've also added support for Multidex, but we still need to enable it. In our <code>build.gradle (Module: app)</code> file, in the <code>default</code> section, add the following line:
+          <pre>
+            <code>
+multiDexEnabled true
+            </code>
+          </pre>
+          For more information on Multidex applications and ways to eliminate the need for Multidex support, refer to <a href="https://developer.android.com/tools/building/multidex.html">Android Documentation on building apps with over 65K methods</a>.
+        </p>
+      </li>
+      <li>
+        <p class="li-header">Exclude duplicate files</p>
+        <p>If we were to run our app now we would probably get an error from Gradle saying that we have duplicate files. To avoid this, in our <code>build.gradle (Module: app)</code> file, add the following to our <code>android</code> section:
+        <pre>
+          <code>      
+packagingOptions {
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+}
+          </code>
+        </pre>
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Review your Gradle file</p>
+        <p>At this point, our <code>gradle.build (Module: app)</code> file looks like this:
+          <pre>
+            <code>
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "{username}.com.myphotoapp"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
+
+allprojects {
+    apply plugin: 'maven'
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+
+        maven {
+            url "${project.rootDir}/creativesdk-repo/release"  // The base location of Creative SDK
+        }
+
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:multidex:1.0.0'
+
+    compile 'com.adobe.creativesdk.foundation:assets:0.4.264'
+    compile 'com.adobe.creativesdk:image:4.0.0'
+}
+
+            </code>
+          </pre>
+        </p>
+      </li>
+
+    </ol> 
+
+    <h2>Fix our deprecated Activity</h2>
+    <p>One final bit of basic housecleaning that we need to do involves the default activity created for us by Android Studio.</p>
+
+    <p>The activity that our <code>MainActivity</code> extends is deprecated. Our code will still run, but Gradle will give us warnings about using a deprecated Activity.</p>
+
+    <ol>
+
+      <li>
+        <p class="li-header">Open the Main Activity file</p>
+        <p>In Android Studio's file browser on the left-hand side of the screen, go to your <code>MainActivity.java</code> file:
+          <blockquote>app > java > {username}.com.myphotoapp > MainActivity</blockquote>
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Replace the deprecated Activity</p>
+        <p>Toward the top of the <code>MainActivity.java</code>file, you should see a line like this:
+          <pre>
+            <code>
+public class MainActivity extends <s>ActionBarActivity</s> {
+            </code>
+          </pre>
+          <code>ActionBarActivity</code> is deprecated and Android Studio indicates that to us by stiking out the class name (e.g., <s>ActionBarActivity</s>).
+        </p>
+        <p>We will replace <code>ActionBarActivity</code> with <code>AppCompatActivity</code>. Our code will now look like following:
+          <pre>
+            <code>
+public class MainActivity extends AppCompatActivity {
+            </code>
+          </pre>
+          Android Studio automatically updates our imported classes and we are no longer using a deprecated class!
+        </p>
+      </li>
+
+    </ol>
+
+    <h2>Run the app</h2>
+    <p>Let's try running the app to make sure it's working as expected.</p>
+
+    <ol>
+
+      <li>
+        <p class="li-header">Launch your virtual device with AVD Manager</p>
+        <p>In Android Studio, open AVD Manager from the menu:
+          <blockquote>Tools > Android > AVD Manager</blockquote>
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Select a virtual device</p>
+        <p>Select a virtual device from the AVD Manager window by double-clicking. For this tutorial, we are using a <strong>Nexus 5 API 22 x86</strong> virtual device.</p>
+        <p>If you don't have a virtual device to select, you will need to create one. <a href="http://developer.android.com/tools/devices/managing-avds.html">See the Android Developer guide for more information on creating and managing virtual devices.</a></p>
+        <p class="bg-info bg-padding">
+          <strong>Note:</strong> Launching a virtual device can take time. Make sure the device launches and you see the emulator running on your computer before you move to the next step.
+          <img src="">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Build and run the app</p>
+        <p>In Android Studio, run the app from the menu:
+          <blockquote>Run > Run app</blockquote>
+        </p>
+        <p>When you run the app, two things will happen:
+          <ol>
+            <li>Gradle will build the app</li>
+            <li>Android Studio will run the app on your virtual device</li>
+          </ol>
+        </p>
+
+        <p>If the Gradle build is successful, a Choose Device window will appear. Select the virtual device that we launched in the previous step and click OK.</p>
+
+        <p>After the build and run process is complete (which can take some time), you should see our app running in the virtual device:
+          <img src="">
+        </p>
+
+      </li>
+
+      <li>
+        <p class="li-header">Troubleshooting</p>
+        <p>If your app didn't build and run as expected, here are several ideas to pursue in troubleshooting the problem:
+          <ul>
+            <li>Note any errors that appear in the console at the bottom of Android Studio. They can provide good hints about the source of the problem.</li>
+            <li>Review the requirements noted in the <a href="#" ui-sref="intro">Intro section of this tutorial</a>.</li>
+            <li>Review the steps we took in this section of the tutorial.</li>
+            <li>Try rebuilding the project and then run it again. To rebuild, in the Android Studio menu go to:
+              <blockquote>Build > Rebuild</blockquote>
+              This step may take some time to complete.
+            </li>
+          </ul>
+        </p>
+      </li>
+
+    </ol>
+
+  </div>
+
+</section>
