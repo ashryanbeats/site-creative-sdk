@@ -1,4 +1,4 @@
-app.controller('AuthUserController', function($scope) {
+app.controller('AuthUserLogoutController', function($scope) {
   
   $scope.msgFromScope = "...And I'm a message from the HomeController scope, just so you know that I work!";
 

@@ -1,0 +1,189 @@
+<section id="auth-user-logout" class="row">
+  
+  <div class="col-sm-9" id="content">
+    <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+
+    <h1>Allowing user logout</h1>
+    <h2>What we will do</h2>
+    <p>In this section, we will make it possible for your users log out of Creative Cloud from within your Android app.</p>
+
+    <p>
+      Specifically, we will:
+      <ol>
+        <li>Create new dropdown menu item</li>
+        <li>Allow users to log out by selecting this item</li>
+      </ol>
+    </p>
+
+    <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already implemented user auth as covered in the <a href="#" ui-sref="auth-user">Auth for User section</a>!</p>
+
+
+    <h2>Related documentation for Creative SDK classes</h2>
+    <p>In this section, we will use the following Creative SDK classes:</p>
+    <ul>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+    </ul>
+
+    <h2>Making a dropdown menu item</h2>
+    <p></p>
+    <ol>
+      <li>
+        <p class="li-header">Finding the Main Menu file</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, navigate to the <code>app/res/menu/</code> directory and double-click on the <code>menu_main.xml</code> file to open it.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-user-logout/19-menu-main-xml.png">
+        </p>
+        <p>
+          In the default XML, we see a menu with one item inside. We don't need the current "settings" item so we will repurpose it.
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Setting the item's ID</p>
+        <p>
+          To change the item's ID, we can simply edit the relevant attribute's value:
+          <pre>
+            <code>
+&lt;item <strong>android:id=&quot;@+id/action_logout&quot;</strong>
+      android:title=&quot;@string/action_settings&quot;
+      android:orderInCategory=&quot;100&quot;
+      app:showAsAction=&quot;never&quot;/&gt;            
+            </code>
+          </pre>          
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Setting the item's display string</p>
+        <p>
+          To change the string ID that we are looking for, we will edit the relevant attribute's value:
+          <pre>
+            <code>        
+&lt;item android:id=&quot;@+id/action_logout&quot;
+      <strong>android:title=&quot;@string/action_logout&quot;</strong>
+      android:orderInCategory=&quot;100&quot;
+      app:showAsAction=&quot;never&quot;/&gt;  
+            </code>
+          </pre>  
+          Android Studio will not like this change because the <code>action_logout</code> string doesn't exist! Let's fix that.                  
+        </p>
+      </li> 
+
+      <li>
+        <p class="li-header">Editing the string resource</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, navigate to the <code>app/res/values/</code> directory and double-click on the <code>strings.xml</code> file to open it.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-user-logout/20-strings-xml.png">
+        </p>
+        <p>
+          Again, we don't need the current "action_settings" string so we will repurpose it. Change that line to:
+          <pre>
+            <code>
+&lt;string name=&quot;action_logout&quot;&gt;Log out&lt;/string&gt;            
+            </code>
+          </pre>          
+        </p>
+      </li>                     
+    </ol>
+
+    <h2>Associating a logout method with the menu item</h2>
+    <ol>
+      <li>
+        <p class="li-header">Finding the <code>onOptionsItemSelected()</code> method</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, navigate to the <code>app/java/{username}.com.myphotoapp/</code> directory and double-click on the <code>MainActivity</code> java class to open it.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-user-logout/21-main-activity.png">
+        </p>
+        <p>
+          In this file, find the <code>onOptionsItemSelected()</code>. By default, it will look something like this:
+          <pre>
+            <code>
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
+    int id = item.getItemId();
+
+    //noinspection SimplifiableIfStatement
+    if (id == R.id.action_settings) {
+        return true;
+    }
+
+    return super.onOptionsItemSelected(item);
+}              
+            </code>
+          </pre>          
+        </p>
+      </li>  
+      
+      <li>
+        <p class="li-header">Changing the target item ID</p>
+        <p>
+          By default, <code>onOptionsItemSelected()</code> is checking to see if the ID of the clicked menu item is <code>action_settings</code>, which no longer exists since we just removed it. We need to update the ID:
+          <pre>
+            <code>
+if (id == R.id.<strong>action_logout</strong>) {
+      return true;
+}
+            </code>
+          </pre>          
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Logging out</p>
+        <p>
+          Now we can call the logout method of <code>mUXAuthManager</code>:
+          <pre>
+            <code>
+if (id == R.id.action_logout) {
+    <strong>mUXAuthManager.logout();</strong>
+    return true;
+}            
+            </code>
+          </pre>          
+        </p>
+      </li>                      
+    </ol>
+
+
+    <h2>Build and run the app</h2>
+    <p>
+      Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin. We'll have a look at what we should see so far. We will assume you have already logged in to Creative Cloud with your Adobe ID, as we did in the <a href="#" ui-sref="auth-user">Auth for User section</a>.
+    </p>
+
+    <ol>
+
+      <li>
+        <p class="li-header">The Main Activity view</p>
+        <p>
+          You should see this screen if you are logged in:
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-user/18-activity-main-view.png">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">The menu item</p>
+        <p>
+          After clicking on the menu icon in the top right of the screen, you will see a menu with the single "Log out" item that we just created:
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-user-logout/22-logout-menu-item.png">
+        </p>
+      </li>           
+
+      <li>
+        <p class="li-header">The login screen</p>
+        <p>
+          If you press the "Log out" menu item, you will be taken back the Adobe ID login screen, which is the default view for a user who is not logged in:
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-user/17-adobe-id-login-screen.png">
+        </p>
+      </li>  
+    </ol>
+    <p>Let's look at accessing a user's profile data next!</p>
+  </div>
+
+</section>
