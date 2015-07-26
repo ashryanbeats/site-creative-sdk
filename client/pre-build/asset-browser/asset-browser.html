@@ -1,0 +1,235 @@
+<section id="asset-browser" class="row">
+  
+  <div class="col-sm-9" id="content">
+    <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+
+    <h1>Launching the Adobe Asset Browser</h1>
+    <h2>What we will do</h2>
+    <p>In this section, we will make it possible for our user to launch the Adobe Asset Browser to view the content of their Creative Cloud Lightroom library.</p>
+
+    <p>
+      Specifically, we will:
+      <ol>
+        <li>Add a button to the Main Activity UI</li>
+        <li>Launch the Creative Cloud library UI from our button</li>
+      </ol>
+    </p>
+
+    <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already implemented user auth as covered in the <a href="#" ui-sref="auth-user">Auth for User section</a>!</p>
+
+    <p class="bg-warning bg-padding"><strong>Warning:</strong> This section will assume that you are already logged in to Creative Cloud from within your app. For more details on how to do that, see the <a href="#" ui-sref="auth-user">Auth for User section</a>.</p>
+
+
+    <h2>Related documentation for Creative SDK classes</h2>
+    <p>In this section, we will use the following Creative SDK classes:</p>
+    <ul>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code></code> (<a href="">documentation</a>)</li>
+    </ul>
+
+    <h2>Adding a button to our Activity view</h2>
+    <p>Before we get started with functionality, let's a button to our view.</p>
+    <ol>
+      <li>
+        <p class="li-header">Finding our Main Activity's XML layout</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, navigate to the <code>app/res/layout/</code> directory and double-click on the <code>activity_main.xml</code> file to open it.
+          <img src="">
+        </p>
+        <p class="bg-info bg-padding">
+          <strong>Note:</strong> When editing a layout XML file, Android Studio lets us toggle between "Design" and "Text" views with tabs at the bottom left of the file viewer:
+          <img src="">
+        </p>
+      </li>    
+
+      <li>
+        <p class="li-header">Remove "Hello world!"</p>
+        <p>
+          In the "Design" view, click on the "Hello world!" TextView and delete it.
+          <img src="">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Add a button</p>
+        <p>
+          In the Palette on the left-hand side of the device preview, from the Widgets section drag a Button onto the device preview and place it so that it is centered toward the top of the screen.
+          <img src="">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Edit button properties</p>
+        <p>
+          While the new button is selected, look at the Properties area of the screen toward the bottom-right of the device preview.
+        </p>
+        <p>
+          Edit the following properties with the value indicated below:
+          <ul>
+            <li>layout:width: match_parent</li>
+            <li>id: assetBrowserButton</li>
+            <li>text: @string/asset_browser_button (View my Creative Cloud library)</li>
+          </ul>
+        </p>
+        <div class="bg-info bg-padding">
+          <p><strong>Note:</strong> For text values for UI elements like the button text above, you can either hard code a string directly to the button in the Properties area, or you can add a new string resource by clicking "...". You may choose your preferred method, but in this tutorial we will be using string resources.</p>
+          
+          <p>More information on string resources can be found in the <a href="http://developer.android.com/guide/topics/resources/string-resource.html">Android Documentation</a>.</p>
+        </div>
+      </li>                  
+
+      <li>
+        <p class="li-header">Check the generated XML</p>
+        <p>
+          While we've been working in the Design view, Android Studio has been generating XML for us. Click over to the Text view to see the XML. It should contain a Button element like this:
+          <pre>
+            <code>
+&lt;Button
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:text=&quot;@string/asset_browser_button&quot;
+    android:id=&quot;@+id/assetBrowserButton&quot;
+    android:layout_alignParentTop=&quot;true&quot;
+    android:layout_centerHorizontal=&quot;true&quot;/&gt;            
+            </code>
+          </pre>          
+        </p>
+      </li>                  
+                 
+    </ol>
+
+    <h2>Launching the Asset Browser</h2>
+    <p>Now that we have a button, let's add some functionality to it.</p>
+    <ol>
+      <li>
+        <p class="li-header">Find out Main Activity class</p>
+        <p>
+          First, navigate back to our <code>MainActivity</code> java class using Android Studio's file browser.
+          <img src="">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Make a variable for our button</p>
+        <p>
+          Our button shows in the UI for authenticated users, so we will make a variable for the button in our <code>showAuthenticatedUI()</code> method:
+          <pre>
+            <code>
+public void showAuthenticatedUI() {
+    setContentView(R.layout.activity_main);
+
+    <strong>final Button mAssetBrowserButton = (Button)findViewById(R.id.assetBrowserButton);</strong>
+}            
+            </code>
+          </pre>
+          Here we are finding the button that we created in our XML by the ID that we gave it (assetBrowserButton).         
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Create and set an on-click listener</p>
+        <p>
+          Continuing within our <code>showAuthenticatedUI()</code> method, we will make a new on-click listener:
+          <pre>
+            <code>
+final Button mAssetBrowserButton = (Button)findViewById(R.id.assetBrowserButton);
+
+<strong>        
+View.OnClickListener mListener = new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+
+    }
+};
+mAssetBrowserButton.setOnClickListener(mListener);
+</strong>            
+            </code>
+          </pre>
+          After creating <code>mListener</code> we have immediately set it to <code>mAssetBrowserButton</code>.          
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Set the body of the on-click listener</p>
+        <p>
+          We have a listener in place, now we need to tell it what to do. Our intention here is to launch the Adobe Asset Browser when an authenticated user clicks the button.
+          <pre>
+            <code>
+View.OnClickListener mListener = new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        <strong>AdobeUXAssetBrowser mBrowser = AdobeUXAssetBrowser.getSharedInstance();
+        mBrowser.popupFileBrowser(MainActivity.this, DEFAULT_SIGN_IN_REQUEST_CODE);</strong>
+    }
+};
+mAssetBrowserButton.setOnClickListener(mListener);
+            </code>
+          </pre> 
+          Here we have created a new browser (<code>mBrowser</code>) and then called its method <code>popupFileBrowser</code>.         
+        </p>
+
+      <li>
+        <p class="li-header">Review your <code>showAuthenticatedUI()</code> method</p>
+        <p>
+          At this point, your code should look like this:
+          <pre>
+            <code>
+public void showAuthenticatedUI() {
+    setContentView(R.layout.activity_main);
+
+    final Button mAssetBrowserButton = (Button)findViewById(R.id.assetBrowserButton);
+
+    View.OnClickListener mListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AdobeUXAssetBrowser mBrowser = AdobeUXAssetBrowser.getSharedInstance();
+            mBrowser.popupFileBrowser(MainActivity.this, DEFAULT_SIGN_IN_REQUEST_CODE);
+        }
+    };
+    mAssetBrowserButton.setOnClickListener(mListener);
+
+}            
+            </code>
+          </pre>       
+        </p>
+      </li>
+                         
+    </ol>
+
+
+
+
+
+
+    <h2>Build and run the app</h2>
+    <p>
+      Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin. We will assume you have already logged in to Creative Cloud with your Adobe ID, as we did in the <a href="#" ui-sref="auth-user">Auth for User section</a>.
+    </p>
+
+    <ol>
+
+      <li>
+        <p class="li-header">The Main Activity view</p>
+        <p>
+          You should see this screen if you are logged in:
+          <img src="">
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">The Adobe Asset Browser</p>
+        <p>
+          Just click the button to launch the Adobe Asset Browser!
+          <img src="">   
+        </p>
+      </li>           
+
+    </ol>
+    
+    <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+  </div>
+
+</section>

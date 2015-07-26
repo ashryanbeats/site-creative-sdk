@@ -223,7 +223,7 @@ private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new Ad
     <p>Let's handle the unauthenticated case first so we can actually log in ourselves.</p>
     <ol>
       <li>
-        <p class="li-header">Call a new method in the <code>else</code> case</p>
+        <p class="li-header">Call a new method in the <code>else</code> block</p>
         <p>
           In the <code>mStatusCallback</code> else block, let's call a method which we will define in a another step:
           <pre>
@@ -282,23 +282,43 @@ public void showUnauthenticatedUI() {
     <h2>What to do if a user is logged in</h2>
     <ol>
       <li>
-        <p class="li-header">Setting the content view</p>
+        <p class="li-header">Call a new method from the <code>if</code> block</p>
         <p>
-          Remember when we removed the <code>setContentView()</code> call from <code>onCreate()</code>? We will instead be setting the content view inside of the <code>call</code> method in our callback.
-        </p>
-        <p>
-          We will add the <code>setContentView()</code> call seen below in the if block of the <code>call</code> method:
+          Let's call a new method. We will define it in the next step.
           <pre>
             <code>
 public void call(AdobeAuthSessionHelper.AdobeAuthStatus adobeAuthStatus, AdobeAuthException e) {
             if (AdobeAuthSessionHelper.AdobeAuthStatus.AdobeAuthLoggedIn == adobeAuthStatus) {
                 // if the user is logged in
-                <strong>setContentView(R.layout.activity_main);</strong>
+                <strong>showAuthenticatedUI();</strong>
             } else {
                 // if the user is not logged in
                 showUnauthenticatedUI();
             }
-        }          
+        } 
+...                 
+            </code>
+          </pre>           
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Setting the content view</p>
+        <p>
+          Remember when we removed the <code>setContentView()</code> call from <code>onCreate()</code>? We will instead be setting the content view inside our <code>showUnauthenticatedUI()</code> method.
+        </p>
+        <p>
+          Let's define our new method on the same level as our <code>showUnauthenticatedUI()</code> method:
+          <pre>
+            <code>
+<strong>public void showAuthenticatedUI() {
+    setContentView(R.layout.activity_main);
+}</strong>
+
+public void showUnauthenticatedUI() {
+    mUXAuthManager.login(new AdobeAuthSessionLauncher.Builder().withActivity(this).withRequestCode(DEFAULT_SIGN_IN_REQUEST_CODE).build());
+
+}      
             </code>
           </pre>  
           Altogether, this if/else statement says that if the user is logged in, show them our Activity view; otherwise show them the login screen. This is exactly what we want.        
@@ -335,13 +355,17 @@ public class MainActivity extends AppCompatActivity {
         public void call(AdobeAuthSessionHelper.AdobeAuthStatus adobeAuthStatus, AdobeAuthException e) {
             if (AdobeAuthSessionHelper.AdobeAuthStatus.AdobeAuthLoggedIn == adobeAuthStatus) {
                 // if the user is logged in
-                setContentView(R.layout.activity_main);
+                showAuthenticatedUI();
             } else {
                 // if the user is not logged in
                 showUnauthenticatedUI();
             }
         }
     };
+
+    public void showAuthenticatedUI() {
+        setContentView(R.layout.activity_main);
+    }    
 
     public void showUnauthenticatedUI() {
         mUXAuthManager.login(new AdobeAuthSessionLauncher.Builder().withActivity(this).withRequestCode(DEFAULT_SIGN_IN_REQUEST_CODE).build());
