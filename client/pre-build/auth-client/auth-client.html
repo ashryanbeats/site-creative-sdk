@@ -34,7 +34,7 @@
         <p class="li-header">Create a new java class for the Main Application</p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, open the <code>java</code> directory and click the <code>{username}.com.myphotoapp</code> directory to highlight it.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/12-highlight-java-classes.png">
         </p>
 
         <p>
@@ -44,7 +44,7 @@
         
         <p>
           A Create New Class window will appear. Enter <code>MainApplication</code> as the name and click OK.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/13-create-new-class.png">
         </p>
 
       </li>
@@ -65,7 +65,7 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
         </p>
         <div class="bg-info bg-padding">
           <p><strong>Note:</strong> Android Studio will highlight in red any class that the current class doesn't have access to. In this case, the words <code>Application</code> and <code>IAdobeAuthClientCredentials</code> will likely be highlighted red in your code.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/14-classes-to-import.png">
           </p>
 
           <p>If you hover over a red class name, Android Studio will try to help you import the appropriate class, as you can see in the screenshot above. Simply use the keyboard shortcut indicated in the popup (e.g., option + return on a Mac) and Android Studio will import the necessary class.</p>
@@ -179,12 +179,15 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
           </pre>
         </p>
       </li>
+    </ol>
 
+    <h2>Register your Main Application in the Manifest</h2>
+    <ol>
       <li>
-        <p class="li-header">Register your Main Application in the Manifest</p>
+        <p class="li-header">Edit the Manifest</p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, open the <code>manifests</code> directory and double click the <code>AndroidManifest.xml</code> file to open it.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/15-android-manifest.png">
         </p>
         <p>
           Inside of the top level <code>application</code> tag, we will a new attribute: <code>android:name=".MainApplication"</code>. Your Android Manifest will now look like this:
@@ -230,7 +233,10 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
       </ol>
     </p>
 
-    <p>Visually, nothing should have changed in the app UI. We will start adding some user-facing features in the next step!</p>
+    <p>
+      Visually, there isn't much to look at in the app UI. We will start adding some user-facing features in the next step!
+      <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/15a-blank-screen.png">
+    </p>
 
 
   </div>
