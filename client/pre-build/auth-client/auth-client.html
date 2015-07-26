@@ -190,22 +190,26 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
           <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/15-android-manifest.png">
         </p>
         <p>
-          Inside of the top level <code>application</code> tag, we will a new attribute: <code>android:name=".MainApplication"</code>. Your Android Manifest will now look like this:
+          Inside of the top level <code>application</code> tag, we will a new attribute: <code>android:name=".MainApplication"</code>. While we're here, we will also add an attribute that only displays our app into protrait mode.
+        </p>
+        <p>
+          Your Android Manifest will now look like this:
           <pre>
             <code>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    package=&quot;{username}.com.myphotoapp&quot; &gt;
+    package=&quot;ashryanbeats.com.appb&quot; &gt;
 
     &lt;application
         android:allowBackup=&quot;true&quot;
         android:icon=&quot;@mipmap/ic_launcher&quot;
         android:label=&quot;@string/app_name&quot;
         android:theme=&quot;@style/AppTheme&quot;
-        <strong>android:name=&quot;.MainApplication&quot;</strong> &gt;
+        <strong>android:name=&quot;.MainApplication&quot;&gt;</strong>
         &lt;activity
             android:name=&quot;.MainActivity&quot;
-            android:label=&quot;@string/app_name&quot; &gt;
+            android:label=&quot;@string/app_name&quot;
+            <strong>android:screenOrientation=&quot;portrait&quot; &gt;</strong>
             &lt;intent-filter&gt;
                 &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
 
@@ -215,6 +219,7 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
     &lt;/application&gt;
 
 &lt;/manifest&gt;
+
             </code>
           </pre>
         </p>
@@ -232,6 +237,8 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
         <li>Check for errors</li>
       </ol>
     </p>
+
+    <hr>
 
     <p>
       Visually, there isn't much to look at in the app UI. We will start adding some user-facing features in the next step!

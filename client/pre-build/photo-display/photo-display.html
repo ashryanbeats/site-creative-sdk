@@ -3,16 +3,16 @@
   <div class="col-sm-9" id="content">
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
-    <h1>Accessing photo metadata</h1>
+    <h1>Displaying a Lightroom photo</h1>
     <h2>What we will do</h2>
-    <p>In this section, we will display in our app metadata of a photo selected by our user from their Creative Cloud Lightroom library.</p>
+    <p>In this section, we will display in our app a photo selected by our user from their Creative Cloud Lightroom library.</p>
 
     <p>
       Specifically, we will:
       <ol>
-        <li>Make a method to handle the result of our Activity</li>
-        <li>Store metadata about a selected photo</li>
-        <li>Display that metadata in our Activity view</li>
+        <li></li>
+        <li></li>
+        <li></li>
       </ol>
     </p>
 
@@ -31,173 +31,276 @@
       <li><code></code> (<a href="">documentation</a>)</li>
     </ul>
 
-    <h2>Making a method to handle the result of our Activity</h2>
-    <p>The result of what we do in the <a href="#" ui-sref="asset-browser">Adobe Asset Browser</a> will be handled in a method called <code>onActivityResult()</code>. Let's start by making that method.</p>
+
+    <h2>Making an ImageView</h2>
+    <p>In the <a href="#" ui-sref="photo-metadata-display">Displaying Lightroom photo metadata section</a>, we added TextViews to display data in the app. Similarly, we will now add an ImageView to display our photo.</p>
+
     <ol>
       <li>
-        <p class="li-header">Creating the <code>onActivityResult()</code> method</p>
+        <p class="li-header">Adding an ImageView to our Activity layout</p>
         <p>
-          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>MainActivity</code> java class to open it.
-          <img src="">
+          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>activity_main.xml</code> file to open it (look in <code>app/res/layout/</code>).
         </p>
         <p>
-          After our <code>onDestroy()</code> method, let's add an <code>onActivityResult()</code> method:
+          While we could use the layout "Design" view to drag-and-drop our ImageView, for brevity, we will add the following code in our layout "Text" view instead:
           <pre>
             <code>
-@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
-}              
-            </code>
-          </pre>
-          Note that this method looks very similar to our <code>onXYZ()</code> (like <code>onDestroy()</code>, etc.) methods that we added in an earlier step. There is a call to a method on <code>super</code> and a method on <code>mAuthSessionHelper</code>.
-        </p>
-      </li>
-
-      <li>
-        <p class="li-header">Checking our request code and result code</p>
-        <p>
-          When <code>onActivityResult()</code> is called, it will be called with 3 arguments: <code>requestCode</code>, <code>resultCode</code>, and <code>data</code>. Let's have a look a the first 2 arguments to conditionally set when we will execute further code.
-          <pre>
-            <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-}
+&lt;ImageView
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:id=&quot;@+id/activePhotoImageView&quot;
+    android:layout_alignParentBottom=&quot;true&quot;
+    android:layout_centerHorizontal=&quot;true&quot;
+    android:adjustViewBounds=&quot;true&quot;
+    android:layout_below=&quot;@+id/imageModificationDateLabelTextView&quot;/&gt;         
             </code>
           </pre>  
-          For our purposes here, we are only concerning ourselves with the success case.        
+          Our ImageView has an ID which we will use in our java code. It also has attributes which dictate the image's display size and alignment. In particular, <code>adjustViewBounds</code> will make sure our image stays porportional if it needs to be scaled up or down.        
         </p>
       </li>
-
       <li>
-        <p class="li-header">Preparing to log a result</p>
+        <p class="li-header">Verifying our layout in the "Design" view</p>
         <p>
-          Before we get access to an Adobe Photo Asset, let's get set up to log results so we can check to make sure we're on track.
+          In the layout "Design" view, when the new ImageView is highlighted, your preview should look something like this:
+          <img src="">          
+        </p>
+      </li>                    
+    </ol>
+
+    <h2>Getting and displaying photo in our UI</h2>
+    <p>Now that we have a place for our image to be displayed, let's get the image from Creative Cloud and display it in our ImageView</p>
+    <ol>
+      <li>
+        <p class="li-header">Add a variable for our ImageView</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>MainActivity</code> java file to open it (look in <code>app/java/{username}.com.myphotoapp/</code>).
         </p>
         <p>
-          At the very top of our <code>MainActivity</code> class, make a <code>TAG</code> varible set to the name of our Activity:
+          At the top of our <code>MainActivity</code> class, add a variable for our ImageView:
           <pre>
             <code>
-public class MainActivity extends AppCompatActivity {            
-    public static final String TAG = MainActivity.class.getSimpleName();  
-...              
+public class MainActivity extends AppCompatActivity {
+    public static final String TAG = MainActivity.class.getSimpleName(); // Activity name to be used in logs
+
+    private AdobeAuthSessionHelper mAuthSessionHelper;
+    private final AdobeUXAuthManager mUXAuthManager = AdobeUXAuthManager.getSharedAuthManager();
+    private static int DEFAULT_SIGN_IN_REQUEST_CODE =  2002;
+    private TextView mImageNameTextView;
+    private TextView mImageSizeTextView;
+    private TextView mImageCreationDateTextView;
+    private TextView mImageModificationDateTextView;
+    <strong>private ImageView mActivePhotoImageView;</strong>
+...    
             </code>
           </pre>          
         </p>
+
+      </li>
+      <li>
+        <p class="li-header">Find the ImageView by ID</p>
         <p>
-          Next, go back down to <code>onActivityResult()</code> and add a very simple log:
+          In our <code>showAuthenticatedUI()</code> method, we will assign our ImageView to <code>mActivePhotoImageView</code>.
           <pre>
             <code>
-Log.i(TAG, "Result success!");
+public void showAuthenticatedUI() {
+    setContentView(R.layout.activity_main);
+    mImageNameTextView = (TextView)findViewById(R.id.imageNameTextView);
+    mImageSizeTextView = (TextView)findViewById(R.id.imageSizeTextView);
+    mImageCreationDateTextView = (TextView)findViewById(R.id.imageCreationDateTextView);
+    mImageModificationDateTextView = (TextView)findViewById(R.id.imageModificationDateTextView);
+    <strong>mActivePhotoImageView = (ImageView)findViewById(R.id.activePhotoImageView);</strong>
+
+    final Button mAssetBrowserButton = (Button)findViewById(R.id.assetBrowserButton);
+
+    View.OnClickListener mListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AdobeUXAssetBrowser mBrowser = AdobeUXAssetBrowser.getSharedInstance();
+            mBrowser.popupFileBrowser(MainActivity.this, DEFAULT_SIGN_IN_REQUEST_CODE);
+        }
+    };
+    mAssetBrowserButton.setOnClickListener(mListener);
+
+}       
             </code>
-          </pre>
-          Try it out: 
-          <ol>
-            <li>Build and run your app.</li>
-            <li>Launch the Asset Browser.</li>
-            <li>Navigate through the browser, choose a photo, and click open.</li>
-            <li>
-              <p>In Android Studio, look at your Android Logs for "Result success!" (you may need to search for it).
-                <img src="">
-              </p>
-            </li>
-          </ol>
+          </pre>          
         </p>
       </li>
-    </ol>
-    
-    <h2>Getting a selected Adobe Photo Asset</h2>
-    <ol>        
       <li>
-        <p class="li-header">Create a variable for our Adobe Photo Asset</p>
+        <p class="li-header">Request the Photo Asset Rendition in our <code>updateUI()</code> method</p>
         <p>
-          Within our if block, let's create a variable that is assigned to the return value of a method we will create in the following steps:
+          At the end our <code>updateUI()</code> method, we will request the Photo Asset Rendition:
           <pre>
             <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-    <strong>final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);</strong>
+public void updateUI(final AdobePhotoAsset mPhotoAsset) {
+    final String mPhotoName = mPhotoAsset.getName();
+    final String mPhotoSize = makeReadableFileSize(mPhotoAsset.getSize());
+    final String mPhotoCreationDate = formatDate(mPhotoAsset.getCreationDate());
+    final String mPhotoModificationDate = formatDate(mPhotoAsset.getModificationDate());
 
-    Log.i(TAG, "Result success!");
+    Thread thread = new Thread() {
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        mImageNameTextView.setText(mPhotoName);
+                        mImageSizeTextView.setText(mPhotoSize);
+                        mImageCreationDateTextView.setText(mPhotoCreationDate);
+                        mImageModificationDateTextView.setText(mPhotoModificationDate);
+                    } catch (final Exception e) {
+                        Log.e(TAG, "Exception in runnable: " + e);
+                    }
+                }
+            });
+        }
+    };
+    thread.start();
+
+    <strong>AdobePhotoAssetsDataSource.getRenditionForAsset(mPhotoAsset, mMasterDataDownloadCallback);</strong>
+
+}            
+            </code>
+          </pre>          
+        </p>
+      </li>
+      <li>
+        <p class="li-header">Make the basic callback</p>
+        <p>
+          As our second argument to <code>getRenditionForAsset</code> we passed <code>mMasterDataDownloadCallback</code>, but that callback doesn't exist yet. We will make it now, putting it just above the line we added in the previous step:
+          <pre>
+            <code>
+<strong>final IAdobeGenericRequestCallback&lt;byte[], AdobePhotoException&gt; mMasterDataDownloadCallback = new IAdobeGenericRequestCallback&lt;byte[], AdobePhotoException&gt;() {
+    @Override
+    public void onCancellation() {
+
+    }
+
+    @Override
+    public void onCompletion(byte[] bytes) {
+
+    }
+
+    @Override
+    public void onError(AdobePhotoException e) {
+ 
+    }
+
+    @Override
+    public void onProgress(double v) {
+
+    }
+};</strong>
+AdobePhotoAssetsDataSource.getRenditionForAsset(mPhotoAsset, mMasterDataDownloadCallback);            
+            </code>
+          </pre>          
+        </p>
+      </li>  
+
+      <li>
+        <p class="li-header">Handle the error case</p>
+        <p>
+          Add this code in the new callback that we made above:
+          <pre>
+            <code>
+@Override
+public void onError(AdobePhotoException e) {
+    <strong>Log.e(TAG, "Exception: " + e);
+
+    Context context = getApplicationContext();
+    CharSequence text = "Download error due to: " + e.getDescription();
+    int duration = Toast.LENGTH_LONG;
+
+    Toast toast = Toast.makeText(context, text, duration);
+    toast.show();</strong>
 }            
             </code>
           </pre>
-          We pass our <code>data</code> argument to this method so we can work with the data to get the Adobe Photo Asset contained within.           
-        </p>
-      </li>    
-      <li>
-        <p class="li-header">Create a <code>getPhotoAsset()</code> method</p>
-        <p>
-          Below <code>onActivityResult()</code>, let's create the new method:
-          <pre>
-            <code>
-public AdobePhotoAsset getPhotoAsset(Intent data) {
-};            
-            </code>
-          </pre>          
+          Here we log our exception to our console and use <a href="http://developer.android.com/guide/topics/ui/notifiers/toasts.html">Toast</a> to notify our user of the problem. Using <code>e.getDescription()</code> may be a little unweildy for a user-facing notification so you may want to tailer this to something a bit more friendly.
         </p>
       </li>
+
       <li>
-        <p class="li-header">Unpacking the Adobe Photo Asset from <code>data</code> in 4 steps</p>
+        <p class="li-header">Handle the success case</p>
         <p>
-          In our <code>getPhotoAsset</code> method, we will add the following code to gain access to our Adobe Photo Asset:
+          Add this code in the new callback that we made above:
           <pre>
             <code>
-public AdobePhotoAsset getPhotoAsset(Intent data) {
-    <strong>AdobeUXAssetBrowser.ResultProvider mAssetBrowserResult = new AdobeUXAssetBrowser.ResultProvider(data);
-    ArrayList mListOfSelectedAssetFiles = mAssetBrowserResult.getSelectionAssetArray();
-    AdobeSelectionPhotoAsset mAsset = (AdobeSelectionPhotoAsset)mListOfSelectedAssetFiles.get(0);
-    return mAsset.getSelectedItem();</strong>
-};            
+@Override
+public void onCompletion(byte[] bytes) {
+    <strong>InputStream inputStream = new ByteArrayInputStream(bytes);
+    Bitmap image = BitmapFactory.decodeStream(inputStream);
+    mActivePhotoImageView.setImageBitmap(image);</strong>
+}            
             </code>
           </pre>
-          The steps we have taken are as follows:
-          <ol>
-            <li>Construct a new Result Provider object, passing in <code>data</code> as our argument</li>
-            <li>Get the array of assets contained in our Result Provider object</li>
-            <li>Get the first item of the array, which is an Adobe Selection Photo Asset</li>
-            <li>Get and return the selected item from this Selection Photo Asset, which is an Adobe Photo Asset</li>
-          </ol>          
+          Here we receive a byte array and decode it into a Bitmap. We call the <code>setImageBitmap()</code> method of our ImageView, passing in our Bitmap image.
         </p>
-      </li>
-      <li>
-        <p class="li-header">Log the name of the Photo Asset</p>
-        <p>
-          To see if things are working let's try logging the name of our Photo Asset from the if block in <code>onActivityResult()</code>.
-          <pre>
-            <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-    final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
-
-    Log.i(TAG, <strong>"Result success! " + mPhotoAsset.getName()</strong>);
-}
-            </code>
-          </pre>                  
-        </p>
-      </li>                 
+      </li>                                      
     </ol>
 
     <h2>Review your code</h2>
-    <p>We've added two methods to our <code>MainActivity</code> java class: <code>onActivityResult()</code> and <code>getPhotoAsset()</code>.</p>
+    <p>Our <code>updateUI()</code> method is getting pretty big, so let's double-check that nothing is missing or out of place. As always, this and all other code can be found in our app's repository.</p>
     <pre>
       <code>
-@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
+public void updateUI(final AdobePhotoAsset mPhotoAsset) {
+    final String mPhotoName = mPhotoAsset.getName();
+    final String mPhotoSize = makeReadableFileSize(mPhotoAsset.getSize());
+    final String mPhotoCreationDate = formatDate(mPhotoAsset.getCreationDate());
+    final String mPhotoModificationDate = formatDate(mPhotoAsset.getModificationDate());
 
-    if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-        final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
+    Thread thread = new Thread() {
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        mImageNameTextView.setText(mPhotoName);
+                        mImageSizeTextView.setText(mPhotoSize);
+                        mImageCreationDateTextView.setText(mPhotoCreationDate);
+                        mImageModificationDateTextView.setText(mPhotoModificationDate);
+                    } catch (final Exception e) {
+                        Log.e(TAG, "Exception in runnable: " + e);
+                    }
+                }
+            });
+        }
+    };
+    thread.start();
 
-        Log.i(TAG, "Result success! " + mPhotoAsset.getName());
-    }
-}
+    final IAdobeGenericRequestCallback<byte[], AdobePhotoException> mMasterDataDownloadCallback = new IAdobeGenericRequestCallback<byte[], AdobePhotoException>() {
+        @Override
+        public void onCancellation() {
 
-public AdobePhotoAsset getPhotoAsset(Intent data) {
-    AdobeUXAssetBrowser.ResultProvider mAssetBrowserResult = new AdobeUXAssetBrowser.ResultProvider(data);
-    ArrayList mListOfSelectedAssetFiles = mAssetBrowserResult.getSelectionAssetArray();
-    AdobeSelectionPhotoAsset mAsset = (AdobeSelectionPhotoAsset)mListOfSelectedAssetFiles.get(0);
-    return mAsset.getSelectedItem();
-};      
+        }
+
+        @Override
+        public void onCompletion(byte[] bytes) {
+            InputStream inputStream = new ByteArrayInputStream(bytes);
+            Bitmap image = BitmapFactory.decodeStream(inputStream);
+            mActivePhotoImageView.setImageBitmap(image);
+        }
+
+        @Override
+        public void onError(AdobePhotoException e) {
+            Log.e(TAG, "Exception: " + e);
+
+            Context context = getApplicationContext();
+            CharSequence text = "Download error due to: " + e.getDescription();
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+        @Override
+        public void onProgress(double v) {
+
+        }
+    };
+    AdobePhotoAssetsDataSource.getRenditionForAsset(mPhotoAsset, mMasterDataDownloadCallback);
+
+}      
       </code>
     </pre>
 
@@ -209,39 +312,28 @@ public AdobePhotoAsset getPhotoAsset(Intent data) {
     <ol>
 
       <li>
-        <p class="li-header">The Main Activity view</p>
-        <p>
-          You should see this screen if you are logged in:
-          <img src="">
-        </p>
-      </li>
-
-      <li>
-        <p class="li-header">The Adobe Asset Browser</p>
-        <p>
-          Just click the button to launch the Adobe Asset Browser!
-          <img src="">   
-        </p>
-      </li>
-
-      <li>
         <p class="li-header">Open a photo</p>
         <p>
-          Navigate through the browser, choose a photo, and click open.
-          <img src="">
+          As we have done several times already, launch the app, select a photo, and click the Open button.
         </p>
       </li>
 
       <li>
-        <p class="li-header">Look at your logs</p>
+        <p class="li-header">The Main Activity view with a photo</p>
         <p>
-          In Android Studio, look at your Android Logs for "Result success! {YOUR_PHOTO_NAME.jpg}" (you may need to search for it).
+          If your code is working, you should see the photo that you selected.
+          <img src="">   
+        </p>
+        <p>
+          Thanks to our use of <code>adjustViewBounds</code> in <code>activity_main.xml</code> our portait-oriented photos are scaled without distortion.
           <img src="">
         </p>
-      </li>              
+      </li>            
 
     </ol>
     
+    <hr>
+
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
   </div>
 

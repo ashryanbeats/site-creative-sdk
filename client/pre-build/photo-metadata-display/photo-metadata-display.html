@@ -3,15 +3,15 @@
   <div class="col-sm-9" id="content">
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
-    <h1>Accessing photo metadata</h1>
+    <h1>Displaying photo metadata</h1>
     <h2>What we will do</h2>
     <p>In this section, we will display in our app metadata of a photo selected by our user from their Creative Cloud Lightroom library.</p>
 
     <p>
       Specifically, we will:
       <ol>
-        <li>Make a method to handle the result of our Activity</li>
-        <li>Store metadata about a selected photo</li>
+        <li>Add TextViews to our Main Activity</li>
+        <li>Store more metadata about a selected photo</li>
         <li>Display that metadata in our Activity view</li>
       </ol>
     </p>
@@ -31,155 +31,233 @@
       <li><code></code> (<a href="">documentation</a>)</li>
     </ul>
 
-    <h2>Making a method to handle the result of our Activity</h2>
-    <p>The result of what we do in the <a href="#" ui-sref="asset-browser">Adobe Asset Browser</a> will be handled in a method called <code>onActivityResult()</code>. Let's start by making that method.</p>
+    <h2>Making TextViews for labels and values</h2>
+    <p>We'll get started by making TextViews in our UI. The label strings will never change but the value strings will update based on the photo selected by the user.</p>
+    <p>Due to the repetitive nature of the steps in this section, we will use pre-written code and discuss what it is doing. If you want to follow along by using the drag-and-drop "Design" view for our layout, you can skip copying and pasting the code below and try it yourself.
     <ol>
       <li>
-        <p class="li-header">Creating the <code>onActivityResult()</code> method</p>
+        <p class="li-header">Preparing our strings</p>
         <p>
-          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>MainActivity</code> java class to open it.
+          Our TextViews are going to need string resources, so we will prepare them in advance to the string IDs are available to us for later use.
+        </p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>strings.xml</code> file to open it (look in <code>app/res/values/</code>).
           <img src="">
         </p>
         <p>
-          After our <code>onDestroy()</code> method, let's add an <code>onActivityResult()</code> method:
+          After the last string tag, add this code:
           <pre>
             <code>
-@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
-}              
+&lt;string name=&quot;image_data_label&quot;&gt;Image data&lt;/string&gt;
+&lt;string name=&quot;image_name_label&quot;&gt;Name:&lt;/string&gt;
+&lt;string name=&quot;image_name&quot;/&gt;
+&lt;string name=&quot;image_catalog_label_text_view&quot;&gt;In catalog:&lt;/string&gt;
+&lt;string name=&quot;ellipsis&quot;&gt;...&lt;/string&gt;
+&lt;string name=&quot;image_size_label_text_view&quot;&gt;Size:&lt;/string&gt;
+&lt;string name=&quot;creation_date_label_text_view&quot;&gt;Created on:&lt;/string&gt;
+&lt;string name=&quot;image_modification_date_text_view&quot;&gt;Edited on:&lt;/string&gt;   
             </code>
           </pre>
-          Note that this method looks very similar to our <code>onXYZ()</code> (like <code>onDestroy()</code>, etc.) methods that we added in an earlier step. There is a call to a method on <code>super</code> and a method on <code>mAuthSessionHelper</code>.
+          This will give us access to the necessary string via their IDs (i.e., the <code>name</code> attributes).          
         </p>
-      </li>
-
-      <li>
-        <p class="li-header">Checking our request code and result code</p>
         <p>
-          When <code>onActivityResult()</code> is called, it will be called with 3 arguments: <code>requestCode</code>, <code>resultCode</code>, and <code>data</code>. Let's have a look a the first 2 arguments to conditionally set when we will execute further code.
+          While we're here, if you haven't already let's go ahead and remove the strings we aren't using:
           <pre>
             <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-}
-            </code>
-          </pre>  
-          For our purposes here, we are only concerning ourselves with the success case.        
-        </p>
-      </li>
-
-      <li>
-        <p class="li-header">Preparing to log a result</p>
-        <p>
-          Before we get access to an Adobe Photo Asset, let's get set up to log results so we can check to make sure we're on track.
-        </p>
-        <p>
-          At the very top of our <code>MainActivity</code> class, make a <code>TAG</code> varible set to the name of our Activity:
-          <pre>
-            <code>
-public class MainActivity extends AppCompatActivity {            
-    public static final String TAG = MainActivity.class.getSimpleName();  
-...              
+&lt;string name=&quot;hello_world&quot;&gt;Hello world!&lt;/string&gt; // delete this
+&lt;string name=&quot;action_settings&quot;&gt;Settings&lt;/string&gt; // delete this
             </code>
           </pre>          
         </p>
+      </li>
+
+      <li>
+        <p class="li-header">Adding TextViews to our Activity layout</p>
         <p>
-          Next, go back down to <code>onActivityResult()</code> and add a very simple log:
+          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>activity_main.xml</code> file to open it (look in <code>app/res/layout/</code>).
+          <img src="">
+        </p>
+        <p>
+          We will add the following code, which adds TextViews for labels and values, with string assignments and IDs that we will use in our java code later on.
           <pre>
             <code>
-Log.i(TAG, "Result success!");
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceLarge&quot;
+    android:text=&quot;@string/image_data_label&quot;
+    android:id=&quot;@+id/imageDataLabelTextView&quot;
+    android:layout_below=&quot;@+id/assetBrowserButton&quot;
+    android:layout_alignParentLeft=&quot;true&quot;
+    android:layout_alignParentStart=&quot;true&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:text=&quot;@string/image_name_label&quot;
+    android:id=&quot;@+id/imageNameLabelTextView&quot;
+    android:layout_below=&quot;@+id/imageDataLabelTextView&quot;
+    android:layout_alignParentLeft=&quot;true&quot;
+    android:layout_alignParentStart=&quot;true&quot;
+    android:textStyle=&quot;bold&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:id=&quot;@+id/imageName&quot;
+    android:text=&quot;@string/ellipsis&quot;
+    android:layout_toRightOf=&quot;@+id/imageDataLabelTextView&quot;
+    android:layout_toEndOf=&quot;@+id/imageDataLabelTextView&quot;
+    android:layout_marginLeft=&quot;73dp&quot;
+    android:layout_marginStart=&quot;73dp&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:text=&quot;@string/image_size_label_text_view&quot;
+    android:id=&quot;@+id/imageSizeLabelTextView&quot;
+    android:textStyle=&quot;bold&quot;
+    android:layout_alignParentLeft=&quot;true&quot;
+    android:layout_alignParentStart=&quot;true&quot;
+    android:layout_below=&quot;@+id/imageNameLabelTextView&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:text=&quot;@string/creation_date_label_text_view&quot;
+    android:id=&quot;@+id/creationDateLabelTextView&quot;
+    android:textStyle=&quot;bold&quot;
+    android:layout_below=&quot;@+id/imageSizeLabelTextView&quot;
+    android:layout_alignParentLeft=&quot;true&quot;
+    android:layout_alignParentStart=&quot;true&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:id=&quot;@+id/imageSizeTextView&quot;
+    android:text=&quot;@string/ellipsis&quot;
+    android:layout_above=&quot;@+id/creationDateLabelTextView&quot;
+    android:layout_alignLeft=&quot;@+id/imageName&quot;
+    android:layout_alignStart=&quot;@+id/imageName&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:id=&quot;@+id/imageCreationDateTextView&quot;
+    android:text=&quot;@string/ellipsis&quot;
+    android:layout_below=&quot;@+id/imageSizeTextView&quot;
+    android:layout_alignLeft=&quot;@+id/imageSizeTextView&quot;
+    android:layout_alignStart=&quot;@+id/imageSizeTextView&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:id=&quot;@+id/imageNameTextView&quot;
+    android:text=&quot;@string/ellipsis&quot;
+    android:layout_below=&quot;@+id/imageDataLabelTextView&quot;
+    android:layout_alignLeft=&quot;@+id/imageSizeTextView&quot;
+    android:layout_alignStart=&quot;@+id/imageSizeTextView&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:text=&quot;@string/image_modification_date_text_view&quot;
+    android:id=&quot;@+id/imageModificationDateLabelTextView&quot;
+    android:textStyle=&quot;bold&quot;
+    android:layout_below=&quot;@+id/creationDateLabelTextView&quot;
+    android:layout_alignParentLeft=&quot;true&quot;
+    android:layout_alignParentStart=&quot;true&quot;/&gt;
+
+&lt;TextView
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;
+    android:id=&quot;@+id/imageModificationDateTextView&quot;
+    android:text=&quot;@string/ellipsis&quot;
+    android:layout_below=&quot;@+id/imageCreationDateTextView&quot;
+    android:layout_alignLeft=&quot;@+id/imageCreationDateTextView&quot;
+    android:layout_alignStart=&quot;@+id/imageCreationDateTextView&quot;/&gt;            
             </code>
-          </pre>
-          Try it out: 
-          <ol>
-            <li>Build and run your app.</li>
-            <li>Launch the Asset Browser.</li>
-            <li>Navigate through the browser, choose a photo, and click open.</li>
-            <li>
-              <p>In Android Studio, look at your Android Logs for "Result success!" (you may need to search for it).
-                <img src="">
-              </p>
-            </li>
-          </ol>
+          </pre>        
         </p>
       </li>
-    </ol>
-    
-    <h2>Getting a selected Adobe Photo Asset</h2>
-    <ol>        
+
       <li>
-        <p class="li-header">Create a variable for our Adobe Photo Asset</p>
+        <p class="li-header">Build and run your app</p>
         <p>
-          Within our if block, let's create a variable that is assigned to the return value of a method we will create in the following steps:
+          We've added a lot of XML so let's check to make sure nothing has gotten lost in the shuffle. When your app launches, your view should look like this:
+          <img src="">         
+        </p>
+      </li>
+                  
+    </ol>
+
+
+    <h2>Getting and displaying data in our UI</h2>
+    <p>As mentioned above, this part of coding our app is quite repetitive. As such, we will focus on updating only one of our strings. The code for updating the rest of the strings can be found in our app's repository.</p>
+    <ol>
+      <li>
+        <p class="li-header">Add a variable for a TextView</p>
+        <p>
+          In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>MainActivity</code> java file to open it (look in <code>app/java/{username}.com.myphotoapp/</code>).
+          <img src="">
+        </p>
+        <p>
+          At the top of our <code>MainActivity</code> class, add a variable for a TextView:
           <pre>
             <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-    <strong>final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);</strong>
+public class MainActivity extends AppCompatActivity {
+    public static final String TAG = MainActivity.class.getSimpleName(); // Activity name to be used in logs
 
-    Log.i(TAG, "Result success!");
+    private AdobeAuthSessionHelper mAuthSessionHelper;
+    private final AdobeUXAuthManager mUXAuthManager = AdobeUXAuthManager.getSharedAuthManager();
+    private static int DEFAULT_SIGN_IN_REQUEST_CODE =  2002;
+    <strong>private TextView mImageNameTextView;</strong>
+...    
+            </code>
+          </pre>          
+        </p>
+      </li>
+      <li>
+        <p class="li-header">Find the TextView by ID</p>
+        <p>
+          In our <code>showAuthenticatedUI()</code> method, we will assign the approriate TextView to <code>mImageNameTextView</code>.
+          <pre>
+            <code>
+public void showAuthenticatedUI() {
+    setContentView(R.layout.activity_main);
+    <strong>mImageNameTextView = (TextView)findViewById(R.id.imageNameTextView);</strong>
+
+    final Button mAssetBrowserButton = (Button)findViewById(R.id.assetBrowserButton);
+
+    View.OnClickListener mListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AdobeUXAssetBrowser mBrowser = AdobeUXAssetBrowser.getSharedInstance();
+            mBrowser.popupFileBrowser(MainActivity.this, DEFAULT_SIGN_IN_REQUEST_CODE);
+        }
+    };
+    mAssetBrowserButton.setOnClickListener(mListener);
+
 }            
             </code>
-          </pre>
-          We pass our <code>data</code> argument to this method so we can work with the data to get the Adobe Photo Asset contained within.           
-        </p>
-      </li>    
-      <li>
-        <p class="li-header">Create a <code>getPhotoAsset()</code> method</p>
-        <p>
-          Below <code>onActivityResult()</code>, let's create the new method:
-          <pre>
-            <code>
-public AdobePhotoAsset getPhotoAsset(Intent data) {
-};            
-            </code>
           </pre>          
         </p>
       </li>
       <li>
-        <p class="li-header">Unpacking the Adobe Photo Asset from <code>data</code> in 4 steps</p>
+        <p class="li-header">Call an <code>updateUI()</code> method</p>
         <p>
-          In our <code>getPhotoAsset</code> method, we will add the following code to gain access to our Adobe Photo Asset:
+          In our <code>onActivityResult()</code> method, call a new method which we will create in the next step:
           <pre>
             <code>
-public AdobePhotoAsset getPhotoAsset(Intent data) {
-    <strong>AdobeUXAssetBrowser.ResultProvider mAssetBrowserResult = new AdobeUXAssetBrowser.ResultProvider(data);
-    ArrayList mListOfSelectedAssetFiles = mAssetBrowserResult.getSelectionAssetArray();
-    AdobeSelectionPhotoAsset mAsset = (AdobeSelectionPhotoAsset)mListOfSelectedAssetFiles.get(0);
-    return mAsset.getSelectedItem();</strong>
-};            
-            </code>
-          </pre>
-          The steps we have taken are as follows:
-          <ol>
-            <li>Construct a new Result Provider object, passing in <code>data</code> as our argument</li>
-            <li>Get the array of assets contained in our Result Provider object</li>
-            <li>Get the first item of the array, which is an Adobe Selection Photo Asset</li>
-            <li>Get and return the selected item from this Selection Photo Asset, which is an Adobe Photo Asset</li>
-          </ol>          
-        </p>
-      </li>
-      <li>
-        <p class="li-header">Log the name of the Photo Asset</p>
-        <p>
-          To see if things are working let's try logging the name of our Photo Asset from the if block in <code>onActivityResult()</code>.
-          <pre>
-            <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
-    final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
-
-    Log.i(TAG, <strong>"Result success! " + mPhotoAsset.getName()</strong>);
-}
-            </code>
-          </pre>                  
-        </p>
-      </li>                 
-    </ol>
-
-    <h2>Review your code</h2>
-    <p>We've added two methods to our <code>MainActivity</code> java class: <code>onActivityResult()</code> and <code>getPhotoAsset()</code>.</p>
-    <pre>
-      <code>
 @Override
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -189,17 +267,80 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
         final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
 
         Log.i(TAG, "Result success! " + mPhotoAsset.getName());
-    }
-}
 
-public AdobePhotoAsset getPhotoAsset(Intent data) {
-    AdobeUXAssetBrowser.ResultProvider mAssetBrowserResult = new AdobeUXAssetBrowser.ResultProvider(data);
-    ArrayList mListOfSelectedAssetFiles = mAssetBrowserResult.getSelectionAssetArray();
-    AdobeSelectionPhotoAsset mAsset = (AdobeSelectionPhotoAsset)mListOfSelectedAssetFiles.get(0);
-    return mAsset.getSelectedItem();
-};      
-      </code>
-    </pre>
+        <strong>updateUI(mPhotoAsset);</strong>
+    }
+}            
+            </code>
+          </pre> 
+          We pass to <code>updateUI()</code> our <code>mPhotoAsset</code>.         
+        </p>
+      </li>
+      <li>
+        <p class="li-header">Create the <code>updateUI()</code> method</p>
+        <p>
+          Below our <code>getPhotoAsset()</code> method, create the <code>updateUI()</code> method:
+          <pre>
+            <code>
+public void updateUI(final AdobePhotoAsset mPhotoAsset) {  
+}        
+            </code>
+          </pre>
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Get the photo name</p>
+        <p>
+          In our <code>updateUI()</code> method, make a variable and assign to it our photo name:
+          <pre>
+            <code>
+public void updateUI(final AdobePhotoAsset mPhotoAsset) {  
+    <strong>final String mPhotoName = mPhotoAsset.getName(); </strong>          
+} 
+            </code>
+          </pre>          
+        </p>
+      </li>
+
+      <li>
+        <p class="li-header">Update the UI with the photo name</p>
+        <p>
+          To update the UI with our <code>mPhotoName</code> string, we'll make a new thread to run on the UI thread that will set the text of <code>mImageNameTextView</code>.
+          <pre>
+            <code>
+public void updateUI(final AdobePhotoAsset mPhotoAsset) {  
+    final String mPhotoName = mPhotoAsset.getName();
+
+    <strong>Thread thread = new Thread() {
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        mImageNameTextView.setText(mPhotoName);
+                    } catch (final Exception e) {
+                        Log.e(TAG, "Exception in runnable: " + e);
+                    }
+                }
+            });
+        }
+    };
+    thread.start(); </strong>
+}           
+            </code>
+          </pre>          
+        </p>
+      </li> 
+
+      <li>
+        <p class="li-header">Repeat these steps</p>
+        <p>
+          We still need to display the photo size, created date, and modified date. The code for this is in the repository.
+        </p>
+      </li>                                       
+    </ol>
+
 
     <h2>Build and run the app</h2>
     <p>
@@ -209,39 +350,35 @@ public AdobePhotoAsset getPhotoAsset(Intent data) {
     <ol>
 
       <li>
-        <p class="li-header">The Main Activity view</p>
-        <p>
-          You should see this screen if you are logged in:
-          <img src="">
-        </p>
-      </li>
-
-      <li>
-        <p class="li-header">The Adobe Asset Browser</p>
-        <p>
-          Just click the button to launch the Adobe Asset Browser!
-          <img src="">   
-        </p>
-      </li>
-
-      <li>
         <p class="li-header">Open a photo</p>
         <p>
-          Navigate through the browser, choose a photo, and click open.
-          <img src="">
+          As we have done several times already, launch the app, select a photo, and click the Open button.
         </p>
       </li>
 
       <li>
-        <p class="li-header">Look at your logs</p>
+        <p class="li-header">The Main Activity view with a photo name</p>
         <p>
-          In Android Studio, look at your Android Logs for "Result success! {YOUR_PHOTO_NAME.jpg}" (you may need to search for it).
+          If your code is working, you should see the name of the photo that you selected.
+          <img src="">   
+        </p>
+        <p>
+          Longer photo names will break our design, but this is something we can fix later by either dynamically playing with the font size or truncating longer strings.
+        </p>
+      </li> 
+
+      <li>
+        <p class="li-header">The Main Activity view with all TextViews updated</p>
+        <p>
+          Once we have added all code for updating the other TextViews, after selecting a photo the Activity view will look like this:
           <img src="">
         </p>
-      </li>              
+      </li>            
 
     </ol>
-    
+  
+    <hr>
+
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
   </div>
 
