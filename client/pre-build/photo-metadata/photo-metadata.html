@@ -5,7 +5,7 @@
 
     <h1>Accessing photo metadata</h1>
     <h2 id="main-1">What we will do</h2>
-    <p>In this section, we will log in our Android Studio console metadata of a photo selected by our user from their Creative Cloud Lightroom library.</p>
+    <p>In this section, in our Android Studio console we will log metadata of a photo selected by our user from their Creative Cloud Lightroom library.</p>
 
     <p>
       Specifically, we will:
@@ -60,7 +60,13 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
           When <code>onActivityResult()</code> is called, it will be called with 3 arguments: <code>requestCode</code>, <code>resultCode</code>, and <code>data</code>. Let's have a look a the first 2 arguments to conditionally set when we will execute further code.
           <pre>
             <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
+
+    <strong>if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+    }</strong>
 }
             </code>
           </pre>  
@@ -78,8 +84,8 @@ if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
           <pre>
             <code>
 public class MainActivity extends AppCompatActivity {            
-    public static final String TAG = MainActivity.class.getSimpleName();  
-...              
+    <strong>public static final String TAG = MainActivity.class.getSimpleName();</strong> 
+    ...              
             </code>
           </pre>          
         </p>
@@ -87,7 +93,17 @@ public class MainActivity extends AppCompatActivity {
           Next, go back down to <code>onActivityResult()</code> and add a very simple log:
           <pre>
             <code>
-Log.i(TAG, "Result success!");
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+
+        <strong>Log.i(TAG, "Result success!");</strong>
+
+    }
+}            
             </code>
           </pre>
           Try it out: 
@@ -120,7 +136,7 @@ if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
 }            
             </code>
           </pre>
-          We pass our <code>data</code> argument to this method so we can work with the data to get the Adobe Photo Asset contained within.           
+          We pass the <code>data</code> argument that was received in <code>onActivityResult()</code> to this method so we can work with the data to get the Adobe Photo Asset contained within.           
         </p>
       </li>    
       <li>

@@ -27,7 +27,7 @@
     </ul>
 
     <h2 id="main-3">Adding a button to our Activity view</h2>
-    <p>Before we get started with functionality, let's a button to our view.</p>
+    <p>Before we get started with functionality, let's add a button to our view.</p>
     <ol>
       <li>
         <p class="li-header">Finding our Main Activity's XML layout</p>
@@ -35,10 +35,15 @@
           In Android Studio's file browser on the left-hand side of the screen, navigate to the <code>app/res/layout/</code> directory and double-click on the <code>activity_main.xml</code> file to open it.
           <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/asset-browser/23-activity-main-xml.png">
         </p>
-        <p class="bg-info bg-padding">
-          <strong>Note:</strong> When editing a layout XML file, Android Studio lets us toggle between "Design" and "Text" views with tabs at the bottom left of the file viewer:
-          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/asset-browser/24-design-and-text-view.png">
-        </p>
+        <div class="bg-info bg-padding">
+          <p>
+            <strong>Note:</strong> When editing a layout XML file, Android Studio lets us toggle between "Design" and "Text" views with tabs at the bottom left of the file viewer:
+            <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/asset-browser/24-design-and-text-view.png">
+          </p>
+          <p>
+            Going forward, we will refer to these as the "Design" and "Text" views, respectively.
+          </p>
+        </div>
       </li>    
 
       <li>
@@ -67,7 +72,7 @@
           <ul>
             <li>layout:width: match_parent</li>
             <li>id: assetBrowserButton</li>
-            <li>text: @string/asset_browser_button (View my Creative Cloud library)</li>
+            <li>text: @string/asset_browser_button ("View my Creative Cloud library")</li>
           </ul>
         </p>
         <div class="bg-info bg-padding">
@@ -80,7 +85,7 @@
       <li>
         <p class="li-header">Check the generated XML</p>
         <p>
-          While we've been working in the Design view, Android Studio has been generating XML for us. Click over to the Text view to see the XML. It should contain a Button element like this:
+          While we've been working in the Design view, Android Studio has been generating XML for us. Click over to the "Text" view to see the XML. It should contain a Button element like this:
           <pre>
             <code>
 &lt;Button
@@ -91,7 +96,10 @@
     android:layout_alignParentTop=&quot;true&quot;
     android:layout_centerHorizontal=&quot;true&quot;/&gt;            
             </code>
-          </pre>          
+          </pre> 
+        </p>
+        <p class="bg-info bg-padding">
+          <strong>Note:</strong> If your drag-and-drop wasn't exactly in the right place, your XML code may look different. If it is different, update the XML code so that it looks like what you see above. The button in the "Design" view will update accordingly! 
         </p>
       </li>                  
                  
@@ -111,7 +119,7 @@
       <li>
         <p class="li-header">Make a variable for our button</p>
         <p>
-          Our button shows in the UI for authenticated users, so we will make a variable for the button in our <code>showAuthenticatedUI()</code> method:
+          Our button should only show in the UI for authenticated users, so we will make a variable for the button in our <code>showAuthenticatedUI()</code> method:
           <pre>
             <code>
 public void showAuthenticatedUI() {

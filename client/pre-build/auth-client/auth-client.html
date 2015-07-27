@@ -5,7 +5,7 @@
 
     <h1>Implementing Adobe Auth for client</h1>
     <h2 id="main-1">What we will do</h2>
-    <p>In this section, we will make it possible for your app to communicate with Adobe Creative Cloud APIs.</p>
+    <p>In this section, we will make it possible for your app to identify itself to Adobe Creative Cloud APIs.</p>
 
     <p>
       Specifically, we will:
@@ -186,11 +186,11 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
       <li>
         <p class="li-header">Edit the Manifest</p>
         <p>
-          In Android Studio's file browser on the left-hand side of the screen, open the <code>manifests</code> directory and double click the <code>AndroidManifest.xml</code> file to open it.
+          In Android Studio's file browser on the left-hand side of the screen, open the <code>manifests</code> directory and double-click the <code>AndroidManifest.xml</code> file to open it.
           <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/auth-client/15-android-manifest.png">
         </p>
         <p>
-          Inside of the top level <code>application</code> tag, we will a new attribute: <code>android:name=".MainApplication"</code>. While we're here, we will also add an attribute that only displays our app into protrait mode.
+          Inside of the top level <code>application</code> tag, we will add a new attribute: <code>android:name=".MainApplication"</code>. While we're here, we will also add an attribute that only displays our app into portrait mode.
         </p>
         <p>
           Your Android Manifest will now look like this:
@@ -198,7 +198,7 @@ public class MainApplication extends Application implements IAdobeAuthClientCred
             <code>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    package=&quot;ashryanbeats.com.appb&quot; &gt;
+    package=&quot;{username}.com.appb&quot; &gt;
 
     &lt;application
         android:allowBackup=&quot;true&quot;

@@ -5,14 +5,14 @@
 
     <h1>Getting started</h1>
     <h2 id="main-1">What we will do</h2>
-    <p>In this section, we will get a basic Android app up and going that will provide the foundation for our Adobe Creative SDK app.</p>
+    <p>In this section, we will get a basic Android app up and running that will provide the foundation for our Adobe Creative SDK app.</p>
 
     <p>
       Specifically, we will:
       <ol>
         <li>Create a new Android Studio project</li>
         <li>Add Adobe Creative SDK to the project</li>
-        <li>Do some basic housecleaning</li>
+        <li>Do some basic housekeeping</li>
         <li>Lanch a virtual device then build and run our basic app</li>
       </ol>
     </p>
@@ -82,10 +82,7 @@
       <li>
         <p class="li-header">Add the base location of Creative SDK to Maven</p>
         <p>
-          In Android Studio's file browser on the left-hand side of the screen, go to your <code>build.gradle (Module: app)</code> file:
-          <blockquote>
-            Gradle Scripts > build.gradle <strong>(Module: app)</strong>
-          </blockquote>
+          In Android Studio's file browser on the left-hand side of the screen, go to your <code>build.gradle (Module: app)</code> file: <code>app/Gradle Script/build.gradle <strong>(Module: app)</strong></code>
         </p>
         <p>
           At the bottom of the <code>build.gradle (Module: app)</code> file, add the following code:
@@ -233,16 +230,16 @@ dependencies {
     </ol> 
 
     <h2 id="main-4">Fix our deprecated Activity</h2>
-    <p>One final bit of basic housecleaning that we need to do involves the default activity created for us by Android Studio.</p>
+    <p>One final bit of basic housekeeping that we need to do involves the default activity created for us by Android Studio.</p>
 
-    <p>The activity that our <code>MainActivity</code> extends is deprecated. Our code will still run, but Gradle will give us warnings about using a deprecated Activity.</p>
+    <p>The activity that our <code>MainActivity</code> extends is deprecated. Our code will still run, but Gradle will give us warnings about using a deprecated Activity. Let's fix that.</p>
 
     <ol>
 
       <li>
         <p class="li-header">Open the Main Activity file</p>
         <p>In Android Studio's file browser on the left-hand side of the screen, go to your <code>MainActivity.java</code> file:
-          <blockquote>app > java > {username}.com.myphotoapp > MainActivity</blockquote>
+          <code>app/java/{username}.com.myphotoapp/MainActivity</code>
         </p>
       </li>
 

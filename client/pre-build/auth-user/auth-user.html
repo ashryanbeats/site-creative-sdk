@@ -10,8 +10,10 @@
     <p>
       Specifically, we will:
       <ol>
-        <li>Show your users a Creative Cloud login screen and allow them to log in</li>
-        <li>Provide a menu item in your app to allow users to log out from Creative Cloud</li>
+        <li>Set up an <code>onCreate()</code> method for our Activity</li>
+        <li>Check our user's authentication status</li>
+        <li>Show the Adobe ID login screen to unauthenticated users</li>
+        <li>Show the Main Activity view to authenticated users</li>
       </ol>
     </p>
 
@@ -50,7 +52,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }            
             </code>
           </pre>  
-          The <code>setContentView()</code> method is providing us with our <code>activity_main</code> view as soon as we launch the app. But for app, that's not always the correct view.
+          The <code>setContentView()</code> method is providing us with our <code>activity_main</code> view as soon as we launch the app. But for our app, that's not always the correct view.
         </p>
         <p>
           Instead, we first want to check if a user is authenticated. Then we want to show:
@@ -91,12 +93,12 @@ protected void onCreate(Bundle savedInstanceState) {
           <pre>
             <code>
 public class MainActivity extends AppCompatActivity {
-    private AdobeAuthSessionHelper mAuthSessionHelper;
+    <strong>private AdobeAuthSessionHelper mAuthSessionHelper;</strong>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthSessionHelper = new AdobeAuthSessionHelper();
+        <strong>mAuthSessionHelper = new AdobeAuthSessionHelper();</strong>
     }
 
 ...            
@@ -116,7 +118,7 @@ protected void onCreate(Bundle savedInstanceState) {
     // ... our existing code
 }
 
-@Override
+<strong>@Override
 protected void onResume() {
     super.onResume();
     mAuthSessionHelper.onResume();
@@ -144,7 +146,7 @@ protected void onStop() {
 protected void onDestroy() {
     super.onDestroy();
     mAuthSessionHelper.onDestroy();
-}
+}</strong>
             </code>
           </pre>          
         </p>
@@ -181,15 +183,19 @@ protected void onCreate(Bundle savedInstanceState) {
           We will create our callback using <code>AdobeAuthSessionHelper.IAdobeAuthStatusCallback</code>.
         </p>
         <p>
-          Let's declare the <code>mStatusCallback</code> variable that we passed to the Auth Session Helper in the previous step:
+          Above our <code>onCreate()</code> method, let's declare the <code>mStatusCallback</code> variable that we passed to the Auth Session Helper in the previous step:
           <pre>
             <code>
-private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new AdobeAuthSessionHelper.IAdobeAuthStatusCallback() {
+<strong>private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new AdobeAuthSessionHelper.IAdobeAuthStatusCallback() {
     @Override
     public void call(AdobeAuthSessionHelper.AdobeAuthStatus adobeAuthStatus, AdobeAuthException e) {
 
     }
-};              
+};</strong>
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {  
+  ...            
             </code>
           </pre>          
         </p>
@@ -245,7 +251,7 @@ private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new Ad
       </li>
 
       <li>
-        <p class="li-header">Create a UX Auth Manager</p>
+        <p class="li-header">Create an Adobe UX Auth Manager</p>
         <p>
           Remember that if a user is not authenticated, we want the Adobe Creative Cloud login screen to be the first thing the user sees.
         </p>
@@ -253,11 +259,15 @@ private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new Ad
           Let's start by declaring some variables that we will need in our <code>showUnauthenticatedUI()</code> method.
           <pre>
             <code>
-private final AdobeUXAuthManager mUXAuthManager = AdobeUXAuthManager.getSharedAuthManager();
-private static int DEFAULT_SIGN_IN_REQUEST_CODE =  2002;
+public class MainActivity extends AppCompatActivity {
+    private AdobeAuthSessionHelper mAuthSessionHelper;
+    <strong>private final AdobeUXAuthManager mUXAuthManager = AdobeUXAuthManager.getSharedAuthManager();
+    private static int DEFAULT_SIGN_IN_REQUEST_CODE =  2002;</strong>
+
+    ...
             </code>
           </pre> 
-          We use Creative SDK's <code>AdobeUXAuthManager</code> to supply the UI for the login screen and 2002 as our login request code.          
+          We use Creative SDK's <code>AdobeUXAuthManager</code> to handle our auth and 2002 as our login request code.          
         </p>
       </li>  
 
@@ -267,10 +277,26 @@ private static int DEFAULT_SIGN_IN_REQUEST_CODE =  2002;
           Let's define the new method that we added to the else block a couple of steps ago:
           <pre>
             <code>
-public void showUnauthenticatedUI() {
+private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new AdobeAuthSessionHelper.IAdobeAuthStatusCallback() {
+    @Override
+    public void call(AdobeAuthSessionHelper.AdobeAuthStatus adobeAuthStatus, AdobeAuthException e) {
+        if (AdobeAuthSessionHelper.AdobeAuthStatus.AdobeAuthLoggedIn == adobeAuthStatus) {
+            // if the user is logged in
+            showAuthenticatedUI();
+        } else {
+            // if the user is not logged in
+            showUnauthenticatedUI();
+        }
+    }
+};
+
+<strong>public void showUnauthenticatedUI() {
     mUXAuthManager.login(new AdobeAuthSessionLauncher.Builder().withActivity(this).withRequestCode(DEFAULT_SIGN_IN_REQUEST_CODE).build());
 
-}            
+}</strong>
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {        
             </code>
           </pre>
           Here we are using the <code>AdobeUXAuthManager</code> method <code>login</code>. As an argument we pass a new Builder object to construct an Auth Session Launcher.          
@@ -282,9 +308,9 @@ public void showUnauthenticatedUI() {
     <h2 id="main-6">What to do if a user is logged in</h2>
     <ol>
       <li>
-        <p class="li-header">Call a new method from the <code>if</code> block</p>
+        <p class="li-header">Call a new method from the <code>if</code> block of <code>call()</code></p>
         <p>
-          Let's call a new method. We will define it in the next step.
+          Our new method is <code>showAuthenticatedUI()</code>. We will define it in the next step.
           <pre>
             <code>
 public void call(AdobeAuthSessionHelper.AdobeAuthStatus adobeAuthStatus, AdobeAuthException e) {
@@ -305,7 +331,7 @@ public void call(AdobeAuthSessionHelper.AdobeAuthStatus adobeAuthStatus, AdobeAu
       <li>
         <p class="li-header">Setting the content view</p>
         <p>
-          Remember when we removed the <code>setContentView()</code> call from <code>onCreate()</code>? We will instead be setting the content view inside our <code>showUnauthenticatedUI()</code> method.
+          Remember when we removed the <code>setContentView()</code> call from <code>onCreate()</code>? We will instead be setting the content view inside our <code>showAuthenticatedUI()</code> method.
         </p>
         <p>
           Let's define our new method on the same level as our <code>showUnauthenticatedUI()</code> method:
@@ -321,7 +347,7 @@ public void showUnauthenticatedUI() {
 }      
             </code>
           </pre>  
-          Altogether, this if/else statement says that if the user is logged in, show them our Activity view; otherwise show them the login screen. This is exactly what we want.        
+          Altogether, our if/else statement in <code>call()</code> says that if the user is logged in, show them our Activity view; otherwise show them the login screen. This is exactly what we want.        
         </p>
       </li>
      

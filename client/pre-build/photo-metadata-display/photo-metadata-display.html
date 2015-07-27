@@ -34,7 +34,7 @@
       <li>
         <p class="li-header">Preparing our strings</p>
         <p>
-          Our TextViews are going to need string resources, so we will prepare them in advance to the string IDs are available to us for later use.
+          Our TextViews are going to need string resources, so we will prepare them in advance so the string IDs are available to us for later use.
         </p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>strings.xml</code> file to open it (look in <code>app/res/values/</code>).
@@ -54,7 +54,7 @@
 &lt;string name=&quot;image_modification_date_text_view&quot;&gt;Edited on:&lt;/string&gt;   
             </code>
           </pre>
-          This will give us access to the necessary string via their IDs (i.e., the <code>name</code> attributes).          
+          This will give us access to the necessary strings via their IDs (i.e., the <code>name</code> attributes).          
         </p>
         <p>
           While we're here, if you haven't already let's go ahead and remove the strings we aren't using:
@@ -359,7 +359,7 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
           <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/38-photo-name-in-ui.png">   
         </p>
         <p class="bg-info bg-padding">
-          Longer photo names will break our design, but this is something we can fix later by either dynamically playing with the font size or truncating longer strings.
+          <strong>Note:</strong> Longer photo names will break our design, but this is something we can fix later by either dynamically playing with the font size or truncating longer strings.
         </p>
       </li> 
 
@@ -368,6 +368,9 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
         <p>
           Once we have added all code for updating the other TextViews, after selecting a photo the Activity view will look like this:
           <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/39-all-textviews.png">
+        </p>
+        <p class="bg-info bg-padding">
+          <strong>Note:</strong> Be sure to look at the <code>makeReadableFileSize()</code> and <code>formatDate()</code> methods in the repository. These format our photo metadata in a way that is nicer to read than the raw return values for size and date.
         </p>
       </li>            
 
