@@ -4,7 +4,7 @@
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
     <h1>Allowing user logout</h1>
-    <h2>What we will do</h2>
+    <h2 id="main-1">What we will do</h2>
     <p>In this section, we will make it possible for your users log out of Creative Cloud from within your Android app.</p>
 
     <p>
@@ -18,13 +18,13 @@
     <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already implemented user auth as covered in the <a href="#" ui-sref="auth-user">Auth for User section</a>!</p>
 
 
-    <h2>Related documentation for Creative SDK class</h2>
+    <h2 id="main-2">Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK classes:</p>
     <ul>
       <li><code>AdobeUXAuthManager</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/auth/AdobeUXAuthManager.html">documentation</a>)</li>
     </ul>
 
-    <h2>Making a dropdown menu item</h2>
+    <h2 id="main-3">Making a dropdown menu item</h2>
     <p></p>
     <ol>
       <li>
@@ -86,7 +86,7 @@
       </li>                     
     </ol>
 
-    <h2>Associating a logout method with the menu item</h2>
+    <h2 id="main-4">Associating a logout method with the menu item</h2>
     <ol>
       <li>
         <p class="li-header">Finding the <code>onOptionsItemSelected()</code> method</p>
@@ -148,7 +148,7 @@ if (id == R.id.action_logout) {
     </ol>
 
 
-    <h2>Build and run the app</h2>
+    <h2 id="main-5">Build and run the app</h2>
     <p>
       Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin. We'll have a look at what we should see so far. We will assume you have already logged in to Creative Cloud with your Adobe ID, as we did in the <a href="#" ui-sref="auth-user">Auth for User section</a>.
     </p>
@@ -186,5 +186,16 @@ if (id == R.id.action_logout) {
     
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
   </div>
+
+  <div class="col-sm-3 scrollspy" id="myScrollspy">
+    <ul class="nav nav-pills nav-stacked affix">
+      <h4>Contents</h4>
+      <li><a href="#main-1">What we will do</a></li>
+      <li><a href="#main-2">Related documentation for Creative SDK classes</a></li>
+      <li><a href="#main-3">Making a dropdown menu item</a></li>
+      <li><a href="#main-4">Associating a logout method with the menu item</a></li>
+      <li><a href="#main-5">Build and run the app</a></li>
+    </ul>
+  </div>  
 
 </section>

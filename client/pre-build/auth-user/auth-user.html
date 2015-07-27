@@ -4,7 +4,7 @@
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
     <h1>Implementing Adobe Auth for user</h1>
-    <h2>What we will do</h2>
+    <h2 id="main-1">What we will do</h2>
     <p>In this section, we will make it possible to let your users log in to Creative Cloud from within your Android app.</p>
 
     <p>
@@ -18,7 +18,7 @@
     <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already implemented client auth as covered in the <a href="#" ui-sref="auth-client">Auth for Client section</a>!</p>
 
 
-    <h2>Related documentation for Creative SDK classes</h2>
+    <h2 id="main-2">Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK classes:</p>
     <ul>
       <li><code>AdobeAuthSessionHelper</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/auth/AdobeAuthSessionHelper.html">documentation</a>)</li>
@@ -29,7 +29,7 @@
     </ul>
 
 
-    <h2>Setting up our Main Activity's <code>onCreate()</code> method</h2>
+    <h2 id="main-3">Setting up our Main Activity's <code>onCreate()</code> method</h2>
     <p>Here we will begin laying the groundwork for our first user-facing feature: the ability to log in to Adobe Creative Cloud. The app will automatically show an unauthenticated user a login screen for Creative Cloud.</p>
 
     <ol>
@@ -151,7 +151,7 @@ protected void onDestroy() {
       </li>      
     </ol>
 
-    <h2>Making the callback for our Auth Session Helper</h2>
+    <h2 id="main-4">Making the callback for our Auth Session Helper</h2>
     <ol>
       <li>
         <p class="li-header">Providing the callback argument to Auth Session Helper</p>
@@ -219,7 +219,7 @@ private AdobeAuthSessionHelper.IAdobeAuthStatusCallback mStatusCallback = new Ad
     </ol>
 
 
-    <h2>What to do if a user isn't logged in</h2>
+    <h2 id="main-5">What to do if a user isn't logged in</h2>
     <p>Let's handle the unauthenticated case first so we can actually log in ourselves.</p>
     <ol>
       <li>
@@ -279,7 +279,7 @@ public void showUnauthenticatedUI() {
                               
     </ol>
 
-    <h2>What to do if a user is logged in</h2>
+    <h2 id="main-6">What to do if a user is logged in</h2>
     <ol>
       <li>
         <p class="li-header">Call a new method from the <code>if</code> block</p>
@@ -327,7 +327,7 @@ public void showUnauthenticatedUI() {
      
     </ol>
 
-    <h2>Review your Main Activity</h2>
+    <h2 id="main-7">Review your Main Activity</h2>
     <p>
       At this point, your <code>MainActivity.java</code> file should look like this:
           <pre>
@@ -439,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
           </pre>      
     </p>
 
-    <h2>Build and run the app</h2>
+    <h2 id="main-8">Build and run the app</h2>
     <p>
       Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin. We'll have a look at what we should see so far.
     </p>
@@ -471,6 +471,20 @@ public class MainActivity extends AppCompatActivity {
     <p>So what about logging a user out? How do we allow them to access their profile data or Creative Cloud assets? We'll be looking at these things in the following steps!</p>
     
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+  </div>
+
+  <div class="col-sm-3 scrollspy" id="myScrollspy">
+    <ul class="nav nav-pills nav-stacked affix">
+      <h4>Contents</h4>
+      <li><a href="#main-1">What we will do</a></li>
+      <li><a href="#main-2">Related documentation for Creative SDK classes</a></li>
+      <li><a href="#main-3">Setting up our Main Activity's onCreate() method</a></li>
+      <li><a href="#main-4">Making the callback for our Auth Session Helper</a></li>
+      <li><a href="#main-5">What to do if a user isn't logged in</a></li>
+      <li><a href="#main-6">What to do if a user is logged in</a></li>
+      <li><a href="#main-7">Review your Main Activity</a></li>
+      <li><a href="#main-8">Build and run the app</a></li>
+    </ul>
   </div>
 
 </section>

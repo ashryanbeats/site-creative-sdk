@@ -4,7 +4,7 @@
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
     <h1>Launching the Adobe Asset Browser</h1>
-    <h2>What we will do</h2>
+    <h2 id="main-1">What we will do</h2>
     <p>In this section, we will make it possible for our user to launch the Adobe Asset Browser to view the content of their Creative Cloud Lightroom library.</p>
 
     <p>
@@ -20,13 +20,13 @@
     <p class="bg-warning bg-padding"><strong>Warning:</strong> This section will assume that you are already logged in to Creative Cloud from within your app. For more details on how to do that, see the <a href="#" ui-sref="auth-user">Auth for User section</a>.</p>
 
 
-    <h2>Related documentation for Creative SDK classes</h2>
+    <h2 id="main-2">Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK class:</p>
     <ul>
       <li><code>AdobeUXAssetBrowser</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/AdobeUXAssetBrowser.html">documentation 1</a>, <a href="https://creativesdk.adobe.com/docs/android/#/articles/assetbrowser/index.html">documentation 2</a>)</li>
     </ul>
 
-    <h2>Adding a button to our Activity view</h2>
+    <h2 id="main-3">Adding a button to our Activity view</h2>
     <p>Before we get started with functionality, let's a button to our view.</p>
     <ol>
       <li>
@@ -97,7 +97,7 @@
                  
     </ol>
 
-    <h2>Launching the Asset Browser</h2>
+    <h2 id="main-4">Launching the Asset Browser</h2>
     <p>Now that we have a button, let's add some functionality to it.</p>
     <ol>
       <li>
@@ -196,11 +196,7 @@ public void showAuthenticatedUI() {
     </ol>
 
 
-
-
-
-
-    <h2>Build and run the app</h2>
+    <h2 id="main-5">Build and run the app</h2>
     <p>
       Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin. We will assume you have already logged in to Creative Cloud with your Adobe ID, as we did in the <a href="#" ui-sref="auth-user">Auth for User section</a>.
     </p>
@@ -228,6 +224,17 @@ public void showAuthenticatedUI() {
     <hr>
     
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+  </div>
+
+  <div class="col-sm-3 scrollspy" id="myScrollspy">
+    <ul class="nav nav-pills nav-stacked affix">
+      <h4>Contents</h4>
+      <li><a href="#main-1">What we will do</a></li>
+      <li><a href="#main-2">Related documentation for Creative SDK classes</a></li>
+      <li><a href="#main-3">Adding a button to our Activity view</a></li>
+      <li><a href="#main-4">Launching the Asset Browser</a></li>
+      <li><a href="#main-5">Build and run the app</a></li>
+    </ul>
   </div>
 
 </section>

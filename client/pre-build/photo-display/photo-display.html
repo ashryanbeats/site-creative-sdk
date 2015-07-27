@@ -4,7 +4,7 @@
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
     <h1>Displaying a Lightroom photo</h1>
-    <h2>What we will do</h2>
+    <h2 id="main-1">What we will do</h2>
     <p>In this section, we will display in our app a photo selected by our user from their Creative Cloud Lightroom library.</p>
 
     <p>
@@ -21,7 +21,7 @@
     <p class="bg-warning bg-padding"><strong>Warning:</strong> This section will assume that you are already logged in to Creative Cloud from within your app. For more details on how to do that, see the <a href="#" ui-sref="auth-user">Auth for User section</a>.</p>
 
 
-    <h2>Related documentation for Creative SDK classes</h2>
+    <h2 id="main-2">Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK classes:</p>
     <ul>
       <li><code>IAdobeGenericRequestCallback</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/IAdobeGenericRequestCallback.html">documentation</a>)</li>
@@ -29,7 +29,7 @@
     </ul>
 
 
-    <h2>Making an ImageView</h2>
+    <h2 id="main-3">Making an ImageView</h2>
     <p>In the <a href="#" ui-sref="photo-metadata-display">Displaying Lightroom photo metadata section</a>, we added TextViews to display data in the app. Similarly, we will now add an ImageView to display our photo.</p>
 
     <ol>
@@ -64,7 +64,7 @@
       </li>                    
     </ol>
 
-    <h2>Getting and displaying photo in our UI</h2>
+    <h2 id="main-4">Getting and displaying photo in our UI</h2>
     <p>Now that we have a place for our image to be displayed, let's get the image from Creative Cloud and display it in our ImageView</p>
     <ol>
       <li>
@@ -236,7 +236,7 @@ public void onCompletion(byte[] bytes) {
       </li>                                      
     </ol>
 
-    <h2>Review your code</h2>
+    <h2 id="main-5">Review your code</h2>
     <p>Our <code>updateUI()</code> method is getting pretty big, so let's double-check that nothing is missing or out of place. As always, this and all other code can be found in our app's repository.</p>
     <pre>
       <code>
@@ -301,7 +301,7 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
       </code>
     </pre>
 
-    <h2>Build and run the app</h2>
+    <h2 id="main-6">Build and run the app</h2>
     <p>
       Just as we did in the <a href="#" ui-sref="getting-started">Getting Started section</a>, go ahead and give the app a spin. We will assume you have already logged in to Creative Cloud with your Adobe ID, as we did in the <a href="#" ui-sref="auth-user">Auth for User section</a>.
     </p>
@@ -332,6 +332,18 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
     <hr>
 
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+  </div>
+
+  <div class="col-sm-3 scrollspy" id="myScrollspy">
+    <ul class="nav nav-pills nav-stacked affix">
+      <h4>Contents</h4>
+      <li><a href="#main-1">What we will do</a></li>
+      <li><a href="#main-2">Related documentation for Creative SDK classes</a></li>
+      <li><a href="#main-3">Making an ImageView</a></li>
+      <li><a href="#main-4">Getting and displaying photo in our UI</a></li>
+      <li><a href="#main-5">Review your code</a></li>
+      <li><a href="#main-6">Build and run the app</a></li>
+    </ul>
   </div>
 
 </section>

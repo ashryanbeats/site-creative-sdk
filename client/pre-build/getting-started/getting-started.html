@@ -4,7 +4,7 @@
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
 
     <h1>Getting started</h1>
-    <h2>What we will do</h2>
+    <h2 id="main-1">What we will do</h2>
     <p>In this section, we will get a basic Android app up and going that will provide the foundation for our Adobe Creative SDK app.</p>
 
     <p>
@@ -19,7 +19,7 @@
 
     <p class="bg-info bg-padding"><strong>Note:</strong> Make sure you've already gathered all the tools you'll need which are listed in the <a href="#" ui-sref="intro">Intro section!</a></p>
 
-    <h2>Start a new Android Studio project</h2>
+    <h2 id="main-2">Start a new Android Studio project</h2>
     <ol>
 
       <li>
@@ -68,7 +68,7 @@
     </ol>
 
 
-    <h2>Add Adobe Creative SDK to the app</h2>
+    <h2 id="main-3">Add Adobe Creative SDK to the app</h2>
     <ol>
 
       <li>
@@ -232,7 +232,7 @@ dependencies {
 
     </ol> 
 
-    <h2>Fix our deprecated Activity</h2>
+    <h2 id="main-4">Fix our deprecated Activity</h2>
     <p>One final bit of basic housecleaning that we need to do involves the default activity created for us by Android Studio.</p>
 
     <p>The activity that our <code>MainActivity</code> extends is deprecated. Our code will still run, but Gradle will give us warnings about using a deprecated Activity.</p>
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
     </ol>
 
-    <h2>Run the app</h2>
+    <h2 id="main-5">Run the app</h2>
     <p>Let's try running the app to make sure it's working as expected.</p>
 
     <ol>
@@ -334,6 +334,17 @@ public class MainActivity extends AppCompatActivity {
     <hr>
 
     <button ui-sref="android" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
+  </div>
+
+  <div class="col-sm-3 scrollspy" id="myScrollspy">
+    <ul class="nav nav-pills nav-stacked affix">
+      <h4>Contents</h4>
+      <li><a href="#main-1">What we will do</a></li>
+      <li><a href="#main-2">Start a new Android Studio project</a></li>
+      <li><a href="#main-3">Add Adobe Creative SDK to the app</a></li>
+      <li><a href="#main-4">Fix our deprecated Activity</a></li>
+      <li><a href="#main-5">Run the app</a></li>
+    </ul>
   </div>
 
 </section>
