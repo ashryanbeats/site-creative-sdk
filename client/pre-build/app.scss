@@ -30,6 +30,11 @@ footer {
   padding-top: 40px;
 }
 
+pre code {
+    word-wrap: normal;
+    white-space: pre;
+}
+
 // Add your fractal Sass files below!
 @import 'navbar/navbar';
 @import 'home/home';
