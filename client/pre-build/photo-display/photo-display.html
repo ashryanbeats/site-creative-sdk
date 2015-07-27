@@ -10,9 +10,9 @@
     <p>
       Specifically, we will:
       <ol>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>Make an ImageView in our Main Activity</li>
+        <li>Download a photo from Creative Cloud</li>
+        <li>Display the photo in our ImageView</li>
       </ol>
     </p>
 
@@ -24,11 +24,8 @@
     <h2>Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK classes:</p>
     <ul>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code>IAdobeGenericRequestCallback</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/IAdobeGenericRequestCallback.html">documentation</a>)</li>
+      <li><code>AdobePhotoException</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/AdobePhotoException.html">documentation</a>)</li>
     </ul>
 
 
@@ -62,7 +59,7 @@
         <p class="li-header">Verifying our layout in the "Design" view</p>
         <p>
           In the layout "Design" view, when the new ImageView is highlighted, your preview should look something like this:
-          <img src="">          
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-display/40-layout-design-view.png">          
         </p>
       </li>                    
     </ol>
@@ -216,7 +213,7 @@ public void onError(AdobePhotoException e) {
 }            
             </code>
           </pre>
-          Here we log our exception to our console and use <a href="http://developer.android.com/guide/topics/ui/notifiers/toasts.html">Toast</a> to notify our user of the problem. Using <code>e.getDescription()</code> may be a little unweildy for a user-facing notification so you may want to tailer this to something a bit more friendly.
+          Here we log our exception to our console and use <a href="http://developer.android.com/guide/topics/ui/notifiers/toasts.html">Toast</a> to notify our user of the problem. Using <code>e.getDescription()</code> may be a little unweildy for a user-facing notification so you may want to tailor this to something a bit more friendly.
         </p>
       </li>
 
@@ -322,11 +319,11 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
         <p class="li-header">The Main Activity view with a photo</p>
         <p>
           If your code is working, you should see the photo that you selected.
-          <img src="">   
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-display/41-photo-display.png">   
         </p>
         <p>
           Thanks to our use of <code>adjustViewBounds</code> in <code>activity_main.xml</code> our portait-oriented photos are scaled without distortion.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-display/42-portrait-display.png">
         </p>
       </li>            
 

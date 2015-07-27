@@ -24,11 +24,10 @@
     <h2>Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK classes:</p>
     <ul>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code>AdobeAuthSessionHelper</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/auth/AdobeAuthSessionHelper.html">documentation</a>)</li>
+      <li><code>AdobePhotoAsset</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/AdobePhotoAsset.html">documentation</a>)</li>
+      <li><code>AdobeUXAssetBrowser.ResultProvider</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/AdobeUXAssetBrowser.ResultProvider.html">documentation</a>)</li>
+      <li><code>AdobeSelectionPhotoAsset</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/AdobeSelectionPhotoAsset.html">documentation</a>)</li>
     </ul>
 
     <h2>Making a method to handle the result of our Activity</h2>
@@ -38,7 +37,7 @@
         <p class="li-header">Creating the <code>onActivityResult()</code> method</p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>MainActivity</code> java class to open it.
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata/30-main-activity-class.png">
         </p>
         <p>
           After our <code>onDestroy()</code> method, let's add an <code>onActivityResult()</code> method:
@@ -51,7 +50,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 }              
             </code>
           </pre>
-          Note that this method looks very similar to our <code>onXYZ()</code> (like <code>onDestroy()</code>, etc.) methods that we added in an earlier step. There is a call to a method on <code>super</code> and a method on <code>mAuthSessionHelper</code>.
+          Note that this method looks very similar to our <code>onXYZ()</code> methods (like <code>onDestroy()</code>, etc.) that we added in an earlier step. There is a call to a method on <code>super</code> and a method on <code>mAuthSessionHelper</code>.
         </p>
       </li>
 
@@ -98,7 +97,7 @@ Log.i(TAG, "Result success!");
             <li>Navigate through the browser, choose a photo, and click open.</li>
             <li>
               <p>In Android Studio, look at your Android Logs for "Result success!" (you may need to search for it).
-                <img src="">
+                <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata/31-log-success.png">
               </p>
             </li>
           </ol>
@@ -209,26 +208,10 @@ public AdobePhotoAsset getPhotoAsset(Intent data) {
     <ol>
 
       <li>
-        <p class="li-header">The Main Activity view</p>
-        <p>
-          You should see this screen if you are logged in:
-          <img src="">
-        </p>
-      </li>
-
-      <li>
-        <p class="li-header">The Adobe Asset Browser</p>
-        <p>
-          Just click the button to launch the Adobe Asset Browser!
-          <img src="">   
-        </p>
-      </li>
-
-      <li>
         <p class="li-header">Open a photo</p>
         <p>
-          Navigate through the browser, choose a photo, and click open.
-          <img src="">
+          Launch the Adobe Asset Browser and click all the way through to a single image. Then click the Open button on the single image screen.
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata/32-single-image.png">
         </p>
       </li>
 
@@ -236,7 +219,7 @@ public AdobePhotoAsset getPhotoAsset(Intent data) {
         <p class="li-header">Look at your logs</p>
         <p>
           In Android Studio, look at your Android Logs for "Result success! {YOUR_PHOTO_NAME.jpg}" (you may need to search for it).
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata/33-log-photo-name.png">
         </p>
       </li>              
 

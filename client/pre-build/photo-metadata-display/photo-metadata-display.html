@@ -24,11 +24,7 @@
     <h2>Related documentation for Creative SDK classes</h2>
     <p>In this section, we will use the following Creative SDK classes:</p>
     <ul>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
-      <li><code></code> (<a href="">documentation</a>)</li>
+      <li><code>AdobePhotoAsset</code> (<a href="https://creativesdk.adobe.com/docs/android/#/com/adobe/creativesdk/foundation/storage/AdobePhotoAsset.html">documentation</a>)</li>
     </ul>
 
     <h2>Making TextViews for labels and values</h2>
@@ -42,7 +38,7 @@
         </p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>strings.xml</code> file to open it (look in <code>app/res/values/</code>).
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/34-strings-xml.png">
         </p>
         <p>
           After the last string tag, add this code:
@@ -75,7 +71,7 @@
         <p class="li-header">Adding TextViews to our Activity layout</p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>activity_main.xml</code> file to open it (look in <code>app/res/layout/</code>).
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/35-activity-main-xml.png">
         </p>
         <p>
           We will add the following code, which adds TextViews for labels and values, with string assignments and IDs that we will use in our java code later on.
@@ -194,7 +190,7 @@
         <p class="li-header">Build and run your app</p>
         <p>
           We've added a lot of XML so let's check to make sure nothing has gotten lost in the shuffle. When your app launches, your view should look like this:
-          <img src="">         
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/36-textviews-in-ui.png">         
         </p>
       </li>
                   
@@ -208,7 +204,7 @@
         <p class="li-header">Add a variable for a TextView</p>
         <p>
           In Android Studio's file browser on the left-hand side of the screen, find and double-click on our <code>MainActivity</code> java file to open it (look in <code>app/java/{username}.com.myphotoapp/</code>).
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/37-main-activity-class.png">
         </p>
         <p>
           At the top of our <code>MainActivity</code> class, add a variable for a TextView:
@@ -360,9 +356,9 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
         <p class="li-header">The Main Activity view with a photo name</p>
         <p>
           If your code is working, you should see the name of the photo that you selected.
-          <img src="">   
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/38-photo-name-in-ui.png">   
         </p>
-        <p>
+        <p class="bg-info bg-padding">
           Longer photo names will break our design, but this is something we can fix later by either dynamically playing with the font size or truncating longer strings.
         </p>
       </li> 
@@ -371,7 +367,7 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
         <p class="li-header">The Main Activity view with all TextViews updated</p>
         <p>
           Once we have added all code for updating the other TextViews, after selecting a photo the Activity view will look like this:
-          <img src="">
+          <img src="https://s3-us-west-1.amazonaws.com/ashryanbeats-adobe-creative-sdk/photo-metadata-display/39-all-textviews.png">
         </p>
       </li>            
 
