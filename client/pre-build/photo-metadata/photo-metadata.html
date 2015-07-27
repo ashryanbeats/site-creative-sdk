@@ -55,22 +55,32 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
       </li>
 
       <li>
-        <p class="li-header">Checking our request code and result code</p>
+        <p class="li-header">Checking our incoming arguments</p>
         <p>
-          When <code>onActivityResult()</code> is called, it will be called with 3 arguments: <code>requestCode</code>, <code>resultCode</code>, and <code>data</code>. Let's have a look a the first 2 arguments to conditionally set when we will execute further code.
+          When <code>onActivityResult()</code> is called, it will be called with 3 arguments: <code>requestCode</code>, <code>resultCode</code>, and <code>data</code>. Let's have a look a these arguments to conditionally set when we will execute further code, making sure the if block only executes for right kind of data.
           <pre>
             <code>
 @Override
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    Bundle extras = data.getExtras();
+
     super.onActivityResult(requestCode, resultCode, data);
     mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
 
-    <strong>if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+    <strong>if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && extras.get("ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST") != null) {
     }</strong>
 }
             </code>
-          </pre>  
-          For our purposes here, we are only concerning ourselves with the success case.        
+          </pre>          
+        </p>
+        <p>
+          Of particular note here is the <code>data</code> argument, on which we call its <code>getExtras()</code> method to assign a Bundle to the <code>extras</code> variable. Using this Bundle, we can call <code>get()</code> and attempt to find the string <code>"ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST"</code> in our if statement. 
+        </p>
+        <p>
+          If we find this string, it means we have the right data. If we don't find the string, we get <code>null</code> and the if block will not execute.
+        </p>
+        <p>
+          For our purposes here, we are only concerning ourselves with the success case.
         </p>
       </li>
 
@@ -98,7 +108,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
 
-    if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+    if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && extras.get("ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST") != null) {
 
         <strong>Log.i(TAG, "Result success!");</strong>
 
@@ -129,7 +139,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
           Within our if block, let's create a variable that is assigned to the return value of a method we will create in the following steps:
           <pre>
             <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && extras.get("ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST") != null) {
     <strong>final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);</strong>
 
     Log.i(TAG, "Result success!");
@@ -180,7 +190,7 @@ public AdobePhotoAsset getPhotoAsset(Intent data) {
           To see if things are working let's try logging the name of our Photo Asset from the if block in <code>onActivityResult()</code>.
           <pre>
             <code>
-if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && extras.get("ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST") != null) {
     final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
 
     Log.i(TAG, <strong>"Result success! " + mPhotoAsset.getName()</strong>);
@@ -200,7 +210,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
 
-    if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
+    if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && extras.get("ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST") != null) {
         final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
 
         Log.i(TAG, "Result success! " + mPhotoAsset.getName());
