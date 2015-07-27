@@ -89,8 +89,8 @@
         </p>
         <p>
           At the bottom of the <code>build.gradle (Module: app)</code> file, add the following code:
-          <pre>
-            <code class="prettyprint">
+          <pre class="prettyprint">
+            <code>
 allprojects {
     apply plugin: 'maven'
 
@@ -115,7 +115,7 @@ allprojects {
           </pre>
         </p>
         <p>Note in particular the following line:
-          <pre>
+          <pre class="prettyprint">
             <code>
 url "${project.rootDir}/creativesdk-repo/release"
             </code>
@@ -127,7 +127,7 @@ url "${project.rootDir}/creativesdk-repo/release"
       <li>
         <p class="li-header">Update your dependencies</p>
         <p>To make sure that the relevant elements of Creative SDK are actually available to us in the app, we need to update our dependencies. In our <code>gradle.build (Module: app)</code> file, make sure the <code>dependencies</code> section matches the following code (or if there is no <code>dependencies</code> section, add the following code to the bottom of your file):
-          <pre>
+          <pre class="prettyprint">
             <code>
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -142,7 +142,7 @@ dependencies {
         </p>
         <p>In our dependencies, we've added Creative SDK Foundation Assets and Image. We will be using these to build our app.</p>
         <p>We've also added support for Multidex, but we still need to enable it. In our <code>build.gradle (Module: app)</code> file, in the <code>default</code> section, add the following line:
-          <pre>
+          <pre class="prettyprint">
             <code>
 multiDexEnabled true
             </code>
@@ -153,7 +153,7 @@ multiDexEnabled true
       <li>
         <p class="li-header">Exclude duplicate files</p>
         <p>If we were to run our app now we would probably get an error from Gradle saying that we have duplicate files. To avoid this, in our <code>build.gradle (Module: app)</code> file, add the following to our <code>android</code> section:
-        <pre>
+        <pre class="prettyprint">
           <code>      
 packagingOptions {
     exclude 'META-INF/LICENSE.txt'
@@ -167,7 +167,7 @@ packagingOptions {
       <li>
         <p class="li-header">Review your Gradle file</p>
         <p>At this point, our <code>gradle.build (Module: app)</code> file looks like this:
-          <pre>
+          <pre class="prettyprint">
             <code>
 apply plugin: 'com.android.application'
 
@@ -249,7 +249,7 @@ dependencies {
       <li>
         <p class="li-header">Replace the deprecated Activity</p>
         <p>Toward the top of the <code>MainActivity.java</code>file, you should see a line like this:
-          <pre>
+          <pre class="prettyprint">
             <code>
 public class MainActivity extends <s>ActionBarActivity</s> {
             </code>
@@ -257,7 +257,7 @@ public class MainActivity extends <s>ActionBarActivity</s> {
           <code>ActionBarActivity</code> is deprecated and Android Studio indicates that to us by stiking out the class name (e.g., <s>ActionBarActivity</s>).
         </p>
         <p>We will replace <code>ActionBarActivity</code> with <code>AppCompatActivity</code>. Our code will now look like following:
-          <pre>
+          <pre class="prettyprint">
             <code>
 public class MainActivity extends AppCompatActivity {
             </code>
