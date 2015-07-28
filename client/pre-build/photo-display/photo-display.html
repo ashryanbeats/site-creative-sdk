@@ -267,7 +267,7 @@ public void updateUI(final AdobePhotoAsset mPhotoAsset) {
     };
     thread.start();
 
-    final IAdobeGenericRequestCallback<byte[], AdobePhotoException> mMasterDataDownloadCallback = new IAdobeGenericRequestCallback<byte[], AdobePhotoException>() {
+    final IAdobeGenericRequestCallback&lt;byte[], AdobePhotoException&gt; mMasterDataDownloadCallback = new IAdobeGenericRequestCallback&lt;byte[], AdobePhotoException&gt;() {
         @Override
         public void onCancellation() {
 

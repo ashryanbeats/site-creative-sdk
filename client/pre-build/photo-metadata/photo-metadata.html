@@ -62,7 +62,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
             <code>
 @Override
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Bundle extras = data.getExtras();
+    <strong>Bundle extras = data.getExtras();</strong>
 
     super.onActivityResult(requestCode, resultCode, data);
     mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
             <code>
 @Override
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    Bundle extras = data.getExtras();
+
     super.onActivityResult(requestCode, resultCode, data);
     mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
 
@@ -207,6 +209,8 @@ if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && ex
       <code>
 @Override
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    Bundle extras = data.getExtras();
+
     super.onActivityResult(requestCode, resultCode, data);
     mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
 
