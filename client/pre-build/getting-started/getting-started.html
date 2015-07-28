@@ -129,7 +129,6 @@ url "${project.rootDir}/creativesdk-repo/release"
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:multidex:1.0.0'
 
     compile 'com.adobe.creativesdk.foundation:assets:0.4.264'
     compile 'com.adobe.creativesdk:image:4.0.0'
@@ -138,14 +137,14 @@ dependencies {
           </pre>
         </p>
         <p>In our dependencies, we've added Creative SDK Foundation Assets and Image. We will be using these to build our app.</p>
-        <p>We've also added support for Multidex, but we still need to enable it. In our <code>build.gradle (Module: app)</code> file, in the <code>defaultConfig</code> section, add the following line:
+        <!-- <p>We've also added support for Multidex, but we still need to enable it. In our <code>build.gradle (Module: app)</code> file, in the <code>defaultConfig</code> section, add the following line:
           <pre class="prettyprint">
             <code>
 multiDexEnabled true
             </code>
           </pre>
           For more information on Multidex applications and ways to eliminate the need for Multidex support, refer to <a href="https://developer.android.com/tools/building/multidex.html">Android Documentation on building apps with over 65K methods</a>.
-        </p>
+        </p> -->
       </li>
       <li>
         <p class="li-header">Exclude duplicate files</p>
@@ -178,7 +177,6 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -216,7 +214,6 @@ allprojects {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:multidex:1.0.0'
 
     compile 'com.adobe.creativesdk.foundation:assets:0.4.264'
     compile 'com.adobe.creativesdk:image:4.0.0'
