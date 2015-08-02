@@ -86,6 +86,40 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
       </li>
 
       <li>
+        <p class="li-header">Checking if there is data to work with in the first place</p>
+        <p>
+          In the code above we are calling <code>data.getExtras()</code> immediately in <code>onActivityResult()</code>. But what if the user pushes the back button at the top-left of the asset browser screen?
+          <img src="">
+        </p>
+        <p>
+          If the user hasn't selected anything, <code>data</code> is null. If we call <code>data.getExtras()</code> while <code>data</code> is null, our app will crash. Let's use an if statement to prevent that:
+          <pre>
+            <code>
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    <strong>if (data != null) {</strong>
+        Bundle extras = data.getExtras();
+
+        super.onActivityResult(requestCode, resultCode, data);
+        mAuthSessionHelper.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == DEFAULT_SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK && extras.get("ADOBE_ASSETBROWSER_PHOTOASSET_SELECTION_LIST") != null) {
+            final AdobePhotoAsset mPhotoAsset = getPhotoAsset(data);
+
+            Log.i(TAG, "Result success! " + mPhotoAsset.getName());
+
+            updateUI(mPhotoAsset);
+        }
+    <strong>}</strong>
+}           
+            </code>
+          </pre>
+          Now, if the user doesn't select anything from the asset browser we simply go back to our previous view without executing any code within our <code>onActivityResult()</code> method.        
+        </p>
+      </li>      
+
+      <li>
         <p class="li-header">Preparing to log a result</p>
         <p>
           Before we get access to an Adobe Photo Asset, let's get set up to log results so we can check to make sure we're on track.
